@@ -1,28 +1,28 @@
 'use strict';
 
-// import Ids from '../modules/ids';
-// import chalk from 'chalk';
+import Ids from '../models/ids';
+import chalk from 'chalk';
 
-// export default class BaseComponent {
-//   constructor () {
-//     this.idList = ['user_id', 'post_id', 'mood_id']
-//   }
+export default class BaseComponent {
+  constructor () {
+    this.idList = ['user_id', 'post_id', 'mood_id']
+  }
 
-//   async getId () {
-//     if (!this.idList.includes(type)) {
-//       console.error(`${type} ${chalk.redBright('Id 类型错误!')}`);
-//       return false;
-//     }
-//     try {
-//       const idData = await Ids.findOne();
-//       idData[type]++;
-//       await idData.save();
-//       return idData[type];
-//     } catch (err) {
-//       console.error(`${chalk.redBright('获取id数据失败')}`);
-//       return false;
-//     }
-//   }
+  async getId (type) {
+    if (!this.idList.includes(type)) {
+      console.error(`${type} ${chalk.redBright('Id 类型错误!')}`);
+      return false;
+    }
+    try {
+      const idData = await Ids.findOne();
+      idData[type]++;
+      await idData.save();
+      return idData[type];
+    } catch (err) {
+      console.error(`${chalk.redBright('获取id数据失败')}`);
+      return false;
+    }
+  }
 
-//   drawCode () {}
-// }
+  drawCode () {}
+}

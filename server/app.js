@@ -1,11 +1,10 @@
 'use strict';
 
-import Koa from 'Koa';
-// import db from './mongodb/db';
+import express from 'express';
 import config from './config';
 import router from './routes';
 
-const app = new Koa();
+const app = new express();
 
 router(app);
 

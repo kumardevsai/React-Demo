@@ -1,6 +1,6 @@
 'use strict';
 
 export default {
-  port: 3001,
+  port: 3000,
   mongodb: 'mongodb://localhost/qz-demo'
 }

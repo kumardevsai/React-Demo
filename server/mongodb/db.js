@@ -8,15 +8,15 @@ mongoose.connect(config.mongodb);
 const db = mongoose.connection;
 
 db.on('connected', () => {
-  console.log('MongoDB Connection Success!')
+  console.log('MongoDB Connection Success!');
 });
 
 db.on('error', (err) => {
-  console.log('MongoDB Connection Error: ' + err)
+  console.error('MongoDB Connection Error: ' + err);
 });
 
 db.on('disconnected', () => {
-  console.log('MongoDB Connection Failed!')
+  console.error('MongoDB Connection Failed!');
 });
 
 export default db;
