@@ -19,11 +19,23 @@
   },
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "precommit": "npm run lint",
+    "lint": "./node_modules/.bin/eslint server"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/yudaren007007/qz-demo.git"
   },
   "dependencies": {
-    "koa": "^2.4.1"
-  }
+    "koa": "^2.4.1",
+    "mongoose": "^5.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "pre-commit": "^1.2.2"
+  },
+  "pre-commit": [
+    "precommit"
+  ]
 }
