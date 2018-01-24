@@ -1,0 +1,29 @@
+{
+  "name": "qz-demo",
+  "version": "0.1.0",
+  "description": "React + Redux + Koa + MongoDB + Purely ===> (移动端)最佳实践!！文章社区前后端构建详情！！",
+  "keywords": [
+    "react",
+    "redux",
+    "koa",
+    "mongodb",
+    "purely"
+  ],
+  "author": {
+    "name": "qingzhan",
+    "email": "yujunren1994@163.com"
+  },
+  "homepage": "https://github.com/yudaren007007/qz-demo",
+  "bugs": {
+    "url": "https://github.com/yudaren007007/qz-demo/issues"
+  },
+  "main": "index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yudaren007007/qz-demo.git"
+  },
+  "dependencies": {
+    "koa": "^2.4.1"
+  }
+}
