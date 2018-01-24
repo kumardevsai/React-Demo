@@ -43,13 +43,13 @@ React + Redux + Koa + MongoDB + Purely ==> (移动端)最佳实践！！技术�
 
 ## 项目博客
 
-  - [(移动端)最佳实践，技术社区前后端构建-原型设计和模型构建(一)]
+  - [(移动端)最佳实践，技术社区前后端构建-原型设计和模型构建(一)]()
 
 ## 其他
 
 本项目的问题你可以提[issue](https://github.com/yudaren007007/qz-demo/issues/new)或者给我发邮件。<br>
 其他无关问题你可以在[segmentfault](https://segmentfault.com/u/qingzhan)给我提问。<br>
-博客发表在我[个人主页](http://www.yujunren.com/blog/)和[segmentfault]()里面。<br>
+博客发表在我[个人主页](http://www.yujunren.com/blog/)和[segmentfault](https://segmentfault.com/blog/qingzhan)里面。<br>
 
 <br>
 
