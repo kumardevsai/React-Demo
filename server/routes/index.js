@@ -7,7 +7,7 @@ import post from './post';
 import mood from './mood';
 
 export default (app) => {
-  app.get('/', (req, res) => {
+  app.get('/api', (req, res) => {
     res.send('Welcome to use qz-demo servcie!');
   });
 

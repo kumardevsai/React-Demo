@@ -23,6 +23,10 @@ React + Redux + Express + MongoDB + Purely ==> (移动端)最佳实践！！构�
    - `mongodb`
    - `express`
    - `mongoose`
+   - `chalk`
+   - `connect-mongo`
+   - `express-session`
+   - `cookie-parser`
 
 ## 功能描述
 
@@ -45,6 +49,7 @@ React + Redux + Express + MongoDB + Purely ==> (移动端)最佳实践！！构�
 ## 项目博客
 
   - [(移动端)最佳实践，技术社区前后端构建-原型设计和模型构建(一)]()
+  - [(移动端)最佳实践，技术社区前后端构建-目录规划和基础构建(二)]()
 
 ## 其他
 
