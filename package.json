@@ -1,5 +1,5 @@
 {
-  "name": "qz-demo",
+  "name": "qz-demo-server",
   "version": "0.3.0",
   "description": "React + Redux + Express + MongoDB + Purely ===> (移动端)最佳实践!！文章社区前后端构建详情！！",
   "keywords": [
@@ -22,7 +22,8 @@
   "scripts": {
     "precommit": "npm run lint",
     "lint": "./node_modules/.bin/eslint server",
-    "start": "supervisor server/index.js"
+    "start:server": "supervisor server/index.js",
+    "start:client": "webpack-dev-server --progress --config client/build/webpack.dev.conf.js"
   },
   "repository": {
     "type": "git",
@@ -35,16 +36,22 @@
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "gd-bmp": "^1.2.4",
-    "mongoose": "^5.0.1"
+    "mongoose": "^5.0.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
+    "babel-loader": "^7.1.2",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
     "eslint": "^4.16.0",
+    "html-webpack-plugin": "^2.30.1",
     "pre-commit": "^1.2.2",
-    "pug": "^2.0.0-rc.4"
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1"
   },
   "pre-commit": [
     "precommit"
