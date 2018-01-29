@@ -17,6 +17,9 @@ module.exports = {
     filename: '[name]-[hash].js',
     path: path.join(__dirname, '../dist')
   },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
   module: {
     rules:[
       {
@@ -27,6 +30,23 @@ module.exports = {
           options: {
             presets: ['env', 'react']
           }
+        }
+      },
+      {
+        test: /.scss$/,
+        include: packFiles,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          { loader: 'sass-loader' }
+        ]
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf|svg)(\?.*)?$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+          name: 'static/font/[name].[hash:8].[ext]'
         }
       }
     ]

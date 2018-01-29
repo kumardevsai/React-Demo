@@ -26,5 +26,5 @@ app.use(session({
 router(app);
 
 app.listen(config.port, () => {
-  console.log(`${chalk.greenBright('qz-demo service start!')}`);
+  console.log(`  ${chalk.greenBright('qz-demo service start!')}`);
 });

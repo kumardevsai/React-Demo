@@ -2,5 +2,5 @@
 
 require('babel-core/register');
 require("babel-polyfill");
-require('./app.js');
 require('./mongodb/db');
+require('./app.js');
