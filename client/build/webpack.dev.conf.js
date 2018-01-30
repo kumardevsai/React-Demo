@@ -4,7 +4,7 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    app: path.join(__dirname, '..', 'src')
+    app: path.join(__dirname, '../src')
   },
   output: {
     filename: '[name]-[hash:8].js',
