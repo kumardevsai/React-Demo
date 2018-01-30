@@ -4,6 +4,7 @@ const HtmlWebpackPlugins = require('html-webpack-plugin');
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 module.exports = {
+  devtool: 'cheap-module-eval-source-map',
   entry: {
     app: path.join(__dirname, '../src/main.js')
   },
@@ -34,14 +35,19 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new HtmlWebpackPlugins({
       inject: true,
+      filename: 'index.html',
       template: path.join(__dirname, '../index.html')
     }),
-    new FriendlyErrorsWebpackPlugin()
+    new FriendlyErrorsWebpackPlugin({
+      compilationSuccessInfo: {
+        messages: [`Your application is running success!`],
+      }
+    })
   ],
   devServer: {
     clientLogLevel: 'warning',
@@ -52,7 +58,10 @@ module.exports = {
     compress: true,
     port: 3000,
     open: true,
-    overlay: true,
+    overlay: {
+      warnings: true,
+      errors: true
+    },
     quiet: true
   }
 }
