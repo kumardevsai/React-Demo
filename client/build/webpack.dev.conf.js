@@ -1,30 +1,23 @@
-'use strict';
-
 const path = require('path');
 const HtmlWebpackPlugins = require('html-webpack-plugin');
-
-function resolve(dir) {
-  return path.join(__dirname, '..', dir);
-}
-
-const packFiles = [resolve('src')];
+const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    app: path.join(__dirname, '../src/main.js')
+    app: path.join(__dirname, '..', 'src')
   },
   output: {
-    filename: '[name]-[hash].js',
-    path: path.join(__dirname, '../dist')
+    filename: '[name]-[hash:8].js',
+    path: '/',
   },
   resolve: {
     extensions: ['.js', '.jsx']
   },
   module: {
-    rules:[
+    rules: [
       {
         test: /.(js|jsx)$/,
-        include: packFiles,
+        include: path.join(__dirname, '../src'),
         use: {
           loader: 'babel-loader',
           options: {
@@ -34,7 +27,7 @@ module.exports = {
       },
       {
         test: /.scss$/,
-        include: packFiles,
+        include: path.join(__dirname, '../src'),
         use: [
           { loader: 'style-loader' },
           { loader: 'css-loader' },
@@ -53,8 +46,19 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugins({
-      filename: 'index.html',
+      inject: true,
       template: path.join(__dirname, '../index.html')
-    })
-  ]
+    }),
+    new webpack.HotModuleReplacementPlugin()
+  ],
+  devServer: {
+    clientLogLevel: 'none',
+    compress: true,
+    port: 3000,
+    hot: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
+    open: true
+  }
 }

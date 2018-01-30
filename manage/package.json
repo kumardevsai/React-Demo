@@ -1,0 +1,29 @@
+{
+  "name": "qz-demo-manage",
+  "version": "1.0.0",
+  "description": "React + Redux + Express + MongoDB + Antd + Purely ===> 构建文章社区！(管理端)",
+  "keywords": [
+    "react",
+    "ant-design"
+  ],
+  "author": {
+    "name": "qingzhan",
+    "email": "yujunren1994@163.com"
+  },
+  "homepage": "https://github.com/yudaren007007/qz-demo",
+  "bugs": {
+    "url": "https://github.com/yudaren007007/qz-demo/issues"
+  },
+  "scripts": {
+    "start": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yudaren007007/qz-demo.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  }
+}

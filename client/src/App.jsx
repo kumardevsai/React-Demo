@@ -1,7 +1,4 @@
-'use strict';
-
 import React from 'react';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -14,6 +11,7 @@ import Genre from './pages/genre/genre';
 import Add from './pages/add/add';
 import Mood from './pages/mood/mood';
 import User from './pages/user/user';
+import Auth from './components/auth/auth';
 import Footer from './components/footer/footer';
 
 import './style/normalize.scss';
@@ -30,7 +28,7 @@ const App = () => (
         <Route path="/genre" component={ Genre } key="genre" />
         <Route path="/add" component={ Add } key="add" />
         <Route path="/mood" component={ Mood } key="mood" />
-        <Route path="/user" component={ User } key="user" />
+        <Route path="/user" component={ Auth } key="user" />
         <Footer />
       </div>
     </Router>

@@ -1,14 +1,18 @@
 {
-  "name": "qz-demo-server",
-  "version": "0.3.0",
-  "description": "React + Redux + Express + MongoDB + Purely ===> (移动端)最佳实践!！文章社区前后端构建详情！！",
-  "keywords": [
-    "react",
-    "redux",
-    "express",
-    "mongodb",
-    "purely"
+  "private": true,
+  "name": "qz-demo",
+  "version": "1.0.0",
+  "description": "React + Redux + Express + MongoDB + Antd + Purely ===> 构建文章社区！",
+  "workspaces": [
+    "client",
+    "manage",
+    "server"
   ],
+  "scripts": {
+    "start:client": "cd client && npm start",
+    "start:manage": "cd manage && npm start",
+    "start:server": "cd server && npm start"
+  },
   "author": {
     "name": "qingzhan",
     "email": "yujunren1994@163.com"
@@ -17,52 +21,5 @@
   "bugs": {
     "url": "https://github.com/yudaren007007/qz-demo/issues"
   },
-  "main": "index.js",
-  "license": "MIT",
-  "scripts": {
-    "precommit": "npm run lint",
-    "lint": "./node_modules/.bin/eslint server",
-    "start:server": "node server/index.js",
-    "start:client": "webpack-dev-server --progress --config client/build/webpack.dev.conf.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yudaren007007/qz-demo.git"
-  },
-  "dependencies": {
-    "chalk": "^2.3.0",
-    "connect-mongo": "^2.0.1",
-    "cookie-parser": "^1.4.3",
-    "express": "^4.16.2",
-    "express-session": "^1.15.6",
-    "gd-bmp": "^1.2.4",
-    "mongoose": "^5.0.1",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-redux": "^5.0.6",
-    "react-router-dom": "^4.2.2",
-    "redux": "^3.7.2"
-  },
-  "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-eslint": "^8.2.1",
-    "babel-loader": "^7.1.2",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "css-loader": "^0.28.9",
-    "eslint": "^4.16.0",
-    "file-loader": "^1.1.6",
-    "html-webpack-plugin": "^2.30.1",
-    "node-sass": "^4.7.2",
-    "pre-commit": "^1.2.2",
-    "sass-loader": "^6.0.6",
-    "style-loader": "^0.20.1",
-    "url-loader": "^0.6.2",
-    "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.11.1"
-  },
-  "pre-commit": [
-    "precommit"
-  ]
+  "license": "MIT"
 }

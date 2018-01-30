@@ -1,5 +1,3 @@
-'use strict';
-
 import React from 'react';
 
 class User extends React.Component {

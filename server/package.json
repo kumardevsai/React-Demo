@@ -1,0 +1,52 @@
+{
+  "name": "qz-demo-server",
+  "version": "1.0.0",
+  "description": "React + Redux + Express + MongoDB + Antd + Purely ===> 构建文章社区！(数据端)",
+  "keywords": [
+    "node.js",
+    "express",
+    "mongodb",
+    "mongoose"
+  ],
+  "author": {
+    "name": "qingzhan",
+    "email": "yujunren1994@163.com"
+  },
+  "homepage": "https://github.com/yudaren007007/qz-demo",
+  "bugs": {
+    "url": "https://github.com/yudaren007007/qz-demo/issues"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "supervisor index.js",
+    "lint": "eslint mongodb config"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "env": {
+      "browser": true,
+      "commonjs": true,
+      "node": true,
+      "es6": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "rules": {}
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongoose": "^5.0.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
+  }
+}

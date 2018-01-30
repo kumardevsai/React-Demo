@@ -1,7 +1,5 @@
-'use strict';
-
 export default {
-  port: 3001,
+  port: 3002,
   mongodb: 'mongodb://localhost/qz-demo',
   session: {
     key: 'qz',
