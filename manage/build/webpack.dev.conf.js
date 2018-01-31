@@ -13,7 +13,10 @@ module.exports = {
     path: '/'
   },
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    alias: {
+      '@': path.join(__dirname, '../src'),
+    }
   },
   module: {
     rules: [
@@ -34,6 +37,21 @@ module.exports = {
       }
     ]
   },
+  devServer: {
+    clientLogLevel: 'warning',
+    historyApiFallback: {
+      disableDotRule: true,
+    },
+    hot: true,
+    compress: true,
+    port: 3000,
+    // open: true,
+    overlay: {
+      warnings: false,
+      errors: true
+    },
+    quiet: true
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
@@ -48,20 +66,5 @@ module.exports = {
         messages: [`Your application is running success!`],
       }
     })
-  ],
-  devServer: {
-    clientLogLevel: 'warning',
-    historyApiFallback: {
-      disableDotRule: true,
-    },
-    hot: true,
-    compress: true,
-    port: 3000,
-    open: true,
-    overlay: {
-      warnings: true,
-      errors: true
-    },
-    quiet: true
-  }
+  ]
 }
