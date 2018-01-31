@@ -1,5 +1,9 @@
 import express from 'express';
+import connectMongo from 'connect-mongo';
+import cookieParser from 'cookie-parser';
+import session from 'express-session';
 import config from './config';
+import router from './routes';
 
 const app = new express();
 
@@ -8,7 +12,6 @@ const ALLOW_ORIGIN = [
   'http://localhost:3001'
 ]
 
-// 跨域
 app.all('*', (req, res, next) => {
   const reqOrigin = req.headers.origin;
   if (ALLOW_ORIGIN.includes(reqOrigin)) {
@@ -31,28 +34,20 @@ app.all('*', (req, res, next) => {
   }
 });
 
-app.get('/api/user/info', function (req, res, next) {
-  const la = false;
+const MongoStore = connectMongo(session);
+app.use(cookieParser());
+app.use(session({
+  name: config.session.key,
+  secret: config.session.secret,
+  resave: true,
+  saveUninitialized: false,
+  cookie: config.session.cookie,
+  store: new MongoStore({
+    url: config.mongodb
+  })
+}));
 
-  if (la) {
-    const user = {
-      id: 1,
-      username: 'qingzhan',
-      password: '123456'
-    }
-
-    res.send({
-      status: 1,
-      data: user
-    });
-  } else {
-    res.send({
-      status: 0,
-      type: 'ERROR_GET_USER_INFO',
-      message: '获取用户信息失败'
-    });
-  }
-});
+router(app);
 
 app.listen(config.port, () => {
   console.log(`  qz-demo service start!`);
