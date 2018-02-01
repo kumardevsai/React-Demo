@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { getUserInfo } from '@/service/api';
+import { getAdminInfo } from '@/service/api';
 import { userInfo } from '@/store/user.reducer';
 
 @withRouter
@@ -16,12 +16,12 @@ class Authorized extends React.Component {
     if (publicList.includes(pathname)) {
       return null;
     }
-
     this.isLoigin();
   }
 
   async isLoigin() {
-    const res = await getUserInfo();
+    const res = await getAdminInfo();
+
     if (res.status === 1) {
       this.props.userInfo(res.data);
     } else {

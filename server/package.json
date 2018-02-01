@@ -18,7 +18,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "node index.js",
+    "start": "supervisor index.js",
     "lint": "eslint mongodb config"
   },
   "babel": {
@@ -41,6 +41,7 @@
     "rules": {}
   },
   "dependencies": {
+    "chalk": "^2.3.0",
     "connect-mongo": "^2.0.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",

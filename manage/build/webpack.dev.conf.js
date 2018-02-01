@@ -15,13 +15,13 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
-      '@': path.join(__dirname, '../src'),
+      '@': path.join(__dirname, '../src')
     }
   },
   module: {
     rules: [
       {
-        test: /.(js|jsx)$/,
+        test: /\.(js|jsx)$/,
         enforce: 'pre',
         loader: 'eslint-loader',
         include: path.join(__dirname, '../src'),
@@ -31,9 +31,20 @@ module.exports = {
         }
       },
       {
-        test: /.(js|jsx)$/,
+        test: /\.(js|jsx)$/,
         include: path.join(__dirname, '../src'),
         loader: 'babel-loader'
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader'
+          }
+        ]
       }
     ]
   },
@@ -45,7 +56,7 @@ module.exports = {
     hot: true,
     compress: true,
     port: 3000,
-    // open: true,
+    open: true,
     overlay: {
       warnings: false,
       errors: true
