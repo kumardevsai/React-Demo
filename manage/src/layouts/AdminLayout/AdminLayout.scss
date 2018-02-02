@@ -30,9 +30,9 @@
 .header {
   height: 44px;
   line-height: 44px;
-}
-.header a {
+  a {
     text-decoration: none;
+  }
 }
 
 .logo {
@@ -43,7 +43,7 @@
 
 .title {
   font-size: 33px;
-  color: #000;
+  color: rgba(0,0,0,.85);
   font-family: 'Myriad Pro', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: 600;
   position: relative;
@@ -52,12 +52,7 @@
 
 .desc {
   font-size: 14px;
-  color: #444;
+  color: rgba(0,0,0,.45);
   margin-top: 12px;
   margin-bottom: 40px;
-}
-
-.main {
-  margin: 0 auto;
-  width: 368px;
 }

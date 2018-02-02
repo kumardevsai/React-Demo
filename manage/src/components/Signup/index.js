@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Signup extends Component {
   render() {
     return (
-      <div>lalal</div>
+      <div>注册页</div>
     );
   }
 }

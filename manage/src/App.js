@@ -3,28 +3,27 @@ import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import store from '@/store';
 
-import Interceptor from '@/components/Interceptor/Interceptor';
-import Authorized from '@/components/Authorized/Authorized';
+// import AuthorizedRoute from '@/components/AuthorizedRoute/AuthorizedRoute';
+// import BasicLayout from '@/layouts/BasicLayout/BasicLayout';
+import AdminLayout from '@/layouts/AdminLayout/AdminLayout';
 
-import Signin from '@/pages/Signin/Signin';
-import Signup from '@/pages/Signup/Signup';
-import Home from '@/pages/Home/Home';
-
-import './index.css';
+import './index.scss';
 
 const App = () => {
   return (
     <Provider store={store}>
       <Router>
-        <div className="root">
-          <Interceptor />
-          <Authorized />
-          <Switch>
-            <Route path="/signin" component={Signin} />
-            <Route path="/signup" component={Signup} />
-            <Route component={Home} />
-          </Switch>
-        </div>
+        <Switch>
+          <Route
+            path="/admin"
+            component={ AdminLayout }
+          />
+          {/*<AuthorizedRoute 
+            path="/"
+            render={props => <BasicLayout {...props} />}
+            redireactPath="/admin/signin"
+          />*/}
+        </Switch>
       </Router>
     </Provider>
   );
