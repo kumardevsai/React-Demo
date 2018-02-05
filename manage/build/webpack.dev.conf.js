@@ -114,10 +114,6 @@ module.exports = {
       filename: 'index.html',
       template: path.join(__dirname, '../public/index.html')
     }),
-    new FriendlyErrorsWebpackPlugin({
-      compilationSuccessInfo: {
-        messages: [`Your application is running success!`],
-      }
-    })
+    new FriendlyErrorsWebpackPlugin()
   ]
 }

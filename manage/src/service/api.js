@@ -1,11 +1,6 @@
 import fetch from './fetch';
 
 /*
-* 拦截器请求
-*/
-export const getStatus = () => fetch('/');
-
-/*
 * 管理员登录
 */
 export const signin = (adminInfo) => fetch('/admin/signin', adminInfo, 'POST');

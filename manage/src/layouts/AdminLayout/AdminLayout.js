@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Link, Switch, Route, Redirect } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import { Icon } from 'antd';
-import Signin from '@/components/Signin';
-import Signup from '@/components/Signup';
-import GlobalFooter from '@/components/GlobalFooter';
 import styles from './AdminLayout.scss';
-import logo from '@/assets/logo.svg'
+import logo from '@/assets/logo.svg';
+import Signin from '@/pages/User/Signin';
+import Signup from '@/pages/User/Signup';
+import GlobalFooter from '@/components/GlobalFooter';
 
 class AdminLayout extends Component {
   getPageTitle() {
@@ -46,7 +46,7 @@ class AdminLayout extends Component {
               }]
             }
             copyright={
-              <div>Copyright <Icon type="copyright" /> 2018 青湛同学鼎力出品.</div>
+              <div>Copyright <Icon type="copyright" /> 2018 青湛鼎力出品.</div>
             }
           />
         </div>

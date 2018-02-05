@@ -1,37 +1,124 @@
 import React, { Component } from 'react';
-import { Form, Input, Icon, Button } from 'antd';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import { Form, Tabs } from 'antd';
+import SigninItem from './SigninItem';
+import SigninTab from './SigninTab';
+import SigninSubmit from './SigninSubmit';
 import styles from './index.scss';
-
-const FormItem = Form.Item;
 
 @Form.create()
 class Signin extends Component {
+  static defaultProps = {
+    className: '',
+    defaultActiveKey: '',
+    onTabChange: () => {},
+    onSubmit: () => {}
+  };
+  static propTypes = {
+    className: PropTypes.string,
+    defaultActiveKey: PropTypes.string,
+    onTabChange: PropTypes.func,
+    onSubmit: PropTypes.func,
+  };
+  static childContextTypes = {
+    tabUtil: PropTypes.object,
+    form: PropTypes.object,
+    updateActive: PropTypes.func,
+  };
+  state = {
+    type: this.props.defaultActiveKey,
+    tabs: [],
+    active: {}
+  };
+  getChildContext() {
+    return {
+      tabUtil: {
+        addTab: (id) => {
+          this.setState({
+            tabs: [...this.state.tabs, id],
+          });
+        },
+        removeTab: (id) => {
+          this.setState({
+            tabs: this.state.tabs.filter(currentId => currentId !== id),
+          });
+        },
+      },
+      form: this.props.form,
+      updateActive: (activeItem) => {
+        const { type, active } = this.state;
+        if (active[type]) {
+          active[type].push(activeItem);
+        } else {
+          active[type] = [activeItem];
+        }
+        this.setState({
+          active,
+        });
+      },
+    };
+  }
+
+
+  componentDidMount() {
+    // console.log(this.props);
+  }
+
+  onSwitch(type) {
+    this.setState({
+      type
+    });
+    this.props.onTabChange(type);
+  }
+
+  handleSubmit() {
+    console.log(1);
+  }
+
   render() {
-    const { getFieldDecorator } = this.props.form; 
+    const { className, children } = this.props;
+    const { type, tabs } = this.state;
+    const TabChildren = [];
+    const OtherChildren = [];
+    React.Children.forEach(children, item => {
+      if (!item) {
+        return;
+      }
+      if (item.type.__QZ_SIGNIN_TAB) {
+        TabChildren.push(item);
+      } else {
+        OtherChildren.push(item);
+      }
+    });
     return (
-      <div className={styles.main}>
-        <Form>
-          <FormItem>
-            {getFieldDecorator('userName', {
-              rules: [{ required: true, message: 'Please input your username!' }],
-            })(
-              <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} size="large" placeholder="Username" />
-            )}
-          </FormItem>
-          <FormItem>
-            {getFieldDecorator('password', {
-              rules: [{ required: true, message: 'Please input your password!' }],
-            })(
-              <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} size="large" placeholder="Password" />
-            )}
-          </FormItem>
-          <FormItem>
-           <Button className={styles.submit} size="large" type="primary" htmlType="submit">登录</Button>
-          </FormItem>
+      <div className={classNames(className, styles.signin)}>
+        <Form onSubmit={this.handleSubmit}>
+          {
+            tabs.length ? (
+              <div>
+                <Tabs
+                  animated={false}
+                  className={styles.tabs}
+                  activeKey={type}
+                  onChange={this.onSwitch.bind(this)}
+                >
+                  {TabChildren}
+                </Tabs>
+                {OtherChildren}
+              </div>
+            ) : [...children]
+          }
         </Form>
       </div>
     );
   }
 }
+
+Signin.Tab = SigninTab;
+Signin.Submit = SigninSubmit;
+Object.keys(SigninItem).forEach(item => {
+  Signin[item] = SigninItem[item];
+});
 
 export default Signin;
