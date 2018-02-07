@@ -1,36 +1,67 @@
 import React, { Component } from 'react';
-import { Form, Input, Select, Row, Col, Button, Popover, Progress } from 'antd';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Form, Input, Select, Row, Col, Button, Popover, Progress, Alert } from 'antd';
+import { Link, Redirect } from 'react-router-dom';
 import styles from './Signup.scss';
+import { signup } from '@/store/admin.reducer';
+import { getPicCaptchaApi, getMsgCaptchaApi } from '@/service/api';
 
 const FormItem = Form.Item;
-const InputGroup = Input.Group;
 const Option = Select.Option;
+const InputGroup = Input.Group;
 
 const passwordStatusMap = {
   ok: <div className={styles.success}>强度：强</div>,
   pass: <div className={styles.warning}>强度：中</div>,
-  poor: <div className={styles.error}>强度：太短</div>,
+  poor: <div className={styles.error}>强度：太短</div>
 };
 
 const passwordProgressMap = {
   ok: 'success',
-  pass: 'normal',
-  poor: 'exception',
+  pass: 'active',
+  poor: 'exception'
 };
 
+@connect(
+  state => state.admin,
+  { signup }
+)
 @Form.create()
 export default class SignupPage extends Component {
   state = {
     count: 0,
-    confirmDirty: false,
     visible: false,
     help: '',
-    prefix: '86'
+    prefix: '86',
+    pic_captcha: '',
+    pic_token: '',
+    pic_time: null,
+    error: ''
   }
 
-  onGetCaptcha() {
-    console.log(1);
+  componentWillMount() {
+    this.ongetPicCaptchaApi();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  async ongetPicCaptchaApi() {
+    const res = await getPicCaptchaApi();
+    if (res.status === 1) {
+      this.setState({
+        pic_captcha: res.data.url,
+        pic_token: res.data.token,
+        pic_time: Date.now()
+      });
+    } else {
+      this.setState({
+        pic_captcha: '',
+        pic_token: '',
+        pic_time: null
+      });
+    }
   }
 
   getPasswordStatus() {
@@ -54,12 +85,18 @@ export default class SignupPage extends Component {
         <Progress
           status={passwordProgressMap[passwordStatus]}
           className={styles.progress}
-          strokeWidth={6}
-          percent={value.length * 10 > 100 ? 100 : value.length * 10}
+          strokeWidth={7}
+          percent={value.length * 6.25 > 100 ? 100 : value.length * 6.25}
           showInfo={false}
         />
       </div>
     ) : null;
+  }
+
+  renderMessage(content) {
+    return (
+      <Alert style={{ marginBottom: 10 }} message={content} type="error" showIcon />
+    );
   }
 
   checkPassword(rule, value, callback) {
@@ -69,9 +106,9 @@ export default class SignupPage extends Component {
         visible: !!value
       });
       callback('error');
-    } else if (!/^(?:(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9])).*$/.test(value)) {
+    } else if (!/(?!^(\d+|[a-zA-Z]+|[~!@#$%^&*?]+)$)^[\w~!@#$%^&*?]./.test(value)) {
       this.setState({
-        help: '密码必须为大写字母、小写字母、数字和特殊字符组成',
+        help: '密码必须为数字、字母和特殊字符其中两种组成',
         visible: false
       });
       callback('error');
@@ -87,10 +124,6 @@ export default class SignupPage extends Component {
       if (value.length < 10) {
         callback('error');
       } else {
-        const { form } = this.props;
-        if (value && this.state.confirmDirty) {
-          form.validateFields(['confirm'], { force: true });
-        }
         callback();
       }
     }
@@ -105,17 +138,88 @@ export default class SignupPage extends Component {
     }
   }
 
-  render() {
+  async checkPicCode(rule, value, callback) {
+    if (!value) {
+      callback('图形验证码不能为空');
+    } else {
+      if (value.length !== 5) {
+        callback('图形验证码必须是5位');
+      } else {
+        const { pic_time, pic_token } = this.state;
+        if ((pic_time - Date.now()) / (1000 * 60) > 1) {
+          callback('图形验证码已经失效，请刷新');
+        }
+        if (value.toLowerCase() !== pic_token.toLowerCase()) {
+          callback('图形验证码错误，请重新输入');
+        }
+        callback();
+      }
+    }
+  }
+
+  async changeGetCaptcha() {
+    await this.ongetPicCaptchaApi();
     const { form } = this.props;
+    form.validateFields(['pic_captcha'], { force: true });
+  }
+
+  async onGetCaptcha() {
+    const { form } = this.props;
+    const { pic_token } = this.state;
+    const token = form.getFieldValue('pic_captcha');
+    const mobile = form.getFieldValue('mobile');
+
+    if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+      this.setState({ error: '请输入正确的手机号' });
+      return false;
+    }
+
+    if (!token || token.toLowerCase() !== pic_token.toLowerCase()) {
+      this.setState({ error: '图形验证码错误' });
+      return false;
+    }
+
+    const res = await getMsgCaptchaApi({ mobile: mobile });
+    
+    if (res.status === 1) {
+      let count = 59;
+      this.setState({ count, error: '' });
+      this.interval = setInterval(() => {
+        count -= 1;
+        this.setState({ count });
+        if ( count === 0) {
+          clearInterval(this.interval);
+        }
+      }, 1000);
+    } else {
+      this.setState({ error: res.message });
+    }
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    this.props.form.validateFields({ force: true }, (err, values) => {
+      if (!err) {
+        this.props.signup(values);
+      }
+    });
+  }
+
+  render() {
+    const { form, error_r, admin_r } = this.props;
     const { getFieldDecorator } = form;
-    const { count, prefix } = this.state;
+    const { count, prefix, pic_captcha, error } = this.state;
     return (
       <div className={styles.main}>
+        { admin_r && <Redirect to='/admin/acc-result' /> }
         <h3>申请管理员</h3>
-        <Form onSubmit={this.handleSub}>
+        <Form onSubmit={this.handleSubmit.bind(this)}>
+          {
+            error && this.renderMessage(error) && error_r && this.renderMessage(error_r)
+          }
           <FormItem>
             {
-              getFieldDecorator('usernmae', {
+              getFieldDecorator('username', {
                 rules: [{
                   required: true,
                   message: '用户名不能为空'
@@ -133,7 +237,7 @@ export default class SignupPage extends Component {
                   {passwordStatusMap[this.getPasswordStatus()]}
                   {this.renderPasswordProgress()}
                   <div style={{ marginTop: 10 }}>
-                    请至少输入 6 个字符。请不要使用容易被猜到的密码。
+                    请至少输入 10 个字符。请不要使用容易被猜到的密码。
                   </div>
                 </div>
               }
@@ -185,7 +289,23 @@ export default class SignupPage extends Component {
             <Row gutter={8}>
               <Col span={16}>
                 {
-                  getFieldDecorator('captcha', {
+                  getFieldDecorator('pic_captcha', {
+                    rules: [{
+                      validator: this.checkPicCode.bind(this)
+                    }]
+                  })(<Input size="large" placeholder="图形验证码" />)
+                }
+              </Col>
+              <Col span={8}>
+                <img className={styles.picCaptcha} src={pic_captcha} onClick={this.changeGetCaptcha.bind(this)} alt="图形验证码" />
+              </Col>
+            </Row>
+          </FormItem>
+          <FormItem>
+            <Row gutter={8}>
+              <Col span={16}>
+                {
+                  getFieldDecorator('mob_captcha', {
                     rules: [{
                       required: true,
                       message: '验证码不能为空'
@@ -193,7 +313,7 @@ export default class SignupPage extends Component {
                       pattern: /^\d{6}$/,
                       message: '验证码必须位6位数字'
                     }]
-                  })(<Input size="large" placeholder="验证码" />)
+                  })(<Input size="large" placeholder="手机验证码" />)
                 }
               </Col>
               <Col span={8}>
@@ -215,7 +335,7 @@ export default class SignupPage extends Component {
               type="primary"
               htmlType="submit"
             >
-              注册
+              申请
             </Button>
             <Link className={styles.signin} to="/admin/signin">
               使用已有账户登录

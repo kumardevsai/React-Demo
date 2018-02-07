@@ -1,4 +1,5 @@
 import admin from './admin';
+import common from './common';
 
 export default app => {
   // 主入口
@@ -8,6 +9,9 @@ export default app => {
       message: 'Welcome to use qz-demo servcie!'
     });
   });
+
+  // Common
+  app.use('/api/common', common);
 
   // Admin
   app.use('/api/admin', admin);

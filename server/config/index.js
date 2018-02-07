@@ -9,5 +9,11 @@ export default {
       secure: false,
       maxAge: 2592000000,
     }
+  },
+  sms: {
+    accessKeyId: '',
+    secretAccessKey: '',
+    signName: '',
+    TemplateCode: '' 
   }
 }

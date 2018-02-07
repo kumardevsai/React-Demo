@@ -1,0 +1,47 @@
+.result {
+  margin: 0 auto;
+  width: 72%;
+  text-align: center;
+  .icon {
+    margin-bottom: 24px;
+    line-height: 72px;
+    font-size: 72px;
+    &>.error {
+      color: #f5222d;
+    }
+    &>.warn {
+      color: #fadb14;
+    }
+    &>.info {
+      color: #1890ff;
+    }
+    &>.success {
+      color: #52c41a;
+    }
+  }
+  .title {
+    margin-bottom: 16px;
+    line-height: 32px;
+    font-size: 24px;
+    font-weight: 500;
+    color: rgba(0,0,0,.85);
+  }
+  .description {
+    margin-bottom: 24px;
+    line-height: 22px;
+    font-size: 14px;
+    color: rgba(0,0,0,.45);
+  }
+  .extra {
+    padding: 24px 40px;
+    background: #fafafa;
+    text-align: left;
+    border-radius: 2px;
+  }
+  .actions {
+    margin-top: 32px;
+    button:not(:last-child) {
+      margin-right: 8px;
+    }
+  }
+}

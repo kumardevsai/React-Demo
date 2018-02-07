@@ -6,11 +6,12 @@ import styles from './AdminLayout.scss';
 import logo from '@/assets/logo.svg';
 import Signin from '@/pages/User/Signin';
 import Signup from '@/pages/User/Signup';
+import AccResult from '@/pages/User/AccResult';
 import GlobalFooter from '@/components/GlobalFooter';
 
 class AdminLayout extends Component {
   getPageTitle() {
-    let title = '技术社区管理端'
+    let title = '技术社区-管理端'
     return title;
   }
   render() {
@@ -30,6 +31,7 @@ class AdminLayout extends Component {
             <Switch>
               <Route path="/admin/signin" component={Signin} key="signin" />
               <Route path="/admin/signup" component={Signup} key="signup" />
+              <Route path="/admin/acc-result" component={AccResult} key="acc-result" />
               <Redirect exact from="/admin" to="/admin/signin" />
             </Switch>
           </div>
