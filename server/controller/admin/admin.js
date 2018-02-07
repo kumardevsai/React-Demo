@@ -32,8 +32,12 @@ class Admin extends BaseComponent {
 
   getInfo(req, res) {
     res.send({
-      status: 0,
-      message: 'lala'
+      status: 1,
+      data: {
+        username: 'qingzhan',
+        password: 'a123456',
+        status: 'info'
+      }
     })
   }
 }

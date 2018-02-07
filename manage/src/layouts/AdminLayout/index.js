@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, Switch, Route, Redirect } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import { Icon } from 'antd';
-import styles from './AdminLayout.scss';
+import styles from './index.scss';
 import logo from '@/assets/logo.svg';
 import Signin from '@/pages/User/Signin';
 import Signup from '@/pages/User/Signup';
@@ -11,7 +11,7 @@ import GlobalFooter from '@/components/GlobalFooter';
 
 class AdminLayout extends Component {
   getPageTitle() {
-    let title = '技术社区-管理端'
+    let title = '管理端-技术社区'
     return title;
   }
   render() {

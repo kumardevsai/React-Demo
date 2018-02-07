@@ -3,9 +3,8 @@ import { Provider } from 'react-redux';
 import { HashRouter as Router, Route, Switch } from 'react-router-dom';
 import store from '@/store';
 
-// import AuthorizedRoute from '@/components/AuthorizedRoute/AuthorizedRoute';
-// import BasicLayout from '@/layouts/BasicLayout/BasicLayout';
-import AdminLayout from '@/layouts/AdminLayout/AdminLayout';
+import BasicLayout from '@/layouts/BasicLayout';
+import AdminLayout from '@/layouts/AdminLayout';
 
 import './index.scss';
 
@@ -18,11 +17,11 @@ const App = () => {
             path="/admin"
             component={ AdminLayout }
           />
-          {/*<AuthorizedRoute 
+          <Route 
+            exact
             path="/"
-            render={props => <BasicLayout {...props} />}
-            redireactPath="/admin/signin"
-          />*/}
+            component={ BasicLayout }
+          />
         </Switch>
       </Router>
     </Provider>

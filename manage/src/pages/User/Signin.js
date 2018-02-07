@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Alert, Checkbox, Icon } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import styles from './Signin.scss';
 import Signin from '@/components/Signin';
 import { connect } from 'react-redux';
@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 const { Tab, Username, Password, Mobile, Captcha, Submit } = Signin;
 
 @connect(
-
+  state => state.admin
 )
 export default class SigninPage extends Component {
   state = {
@@ -37,9 +37,11 @@ export default class SigninPage extends Component {
   }
 
   render() {
+    const { admin_r } = this.props;
     const { type } = this.state;
     return (
       <div className={styles.main}>
+        { admin_r && <Redirect to='/' /> }
         <Signin
           defaultActiveKey={type}
           onTabChange={this.onTabChange.bind(this)}
