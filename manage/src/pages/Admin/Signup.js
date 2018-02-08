@@ -179,8 +179,10 @@ export default class SignupPage extends Component {
       return false;
     }
 
+    console.log(1);
+
     const res = await getMsgCaptchaApi({ mobile: mobile });
-    
+      
     if (res.status === 1) {
       let count = 59;
       this.setState({ count, error: '' });
@@ -214,9 +216,8 @@ export default class SignupPage extends Component {
         { admin_r && <Redirect to='/admin/acc-result' /> }
         <h3>申请管理员</h3>
         <Form onSubmit={this.handleSubmit.bind(this)}>
-          {
-            error && this.renderMessage(error) && error_r && this.renderMessage(error_r)
-          }
+          { error && this.renderMessage(error) }
+          { error_r && this.renderMessage(error_r) }
           <FormItem>
             {
               getFieldDecorator('username', {

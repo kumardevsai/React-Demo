@@ -54,6 +54,7 @@ export function signin(userInfo) {
 export function signup(userInfo) {
   return dispatch => {
     signupApi(userInfo).then(res => {
+      console.log(res);
       if (res.status === 1) {
         dispatch(success(res.data, 'info'));
       } else {

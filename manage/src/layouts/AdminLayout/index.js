@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Link, Switch, Route, Redirect } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import { Icon } from 'antd';
 import styles from './index.scss';
 import logo from '@/assets/logo.svg';
-import Signin from '@/pages/User/Signin';
-import Signup from '@/pages/User/Signup';
-import AccResult from '@/pages/User/AccResult';
+import Signin from '@/pages/Admin/Signin';
+import Signup from '@/pages/Admin/Signup';
+import AccResult from '@/pages/Admin/AccResult';
 import GlobalFooter from '@/components/GlobalFooter';
 
-class AdminLayout extends Component {
+class AdminLayout extends PureComponent {
   getPageTitle() {
     let title = '管理端-技术社区'
     return title;

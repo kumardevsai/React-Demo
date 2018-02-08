@@ -41,11 +41,14 @@
     "rules": {}
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "chalk": "^2.3.0",
     "connect-mongo": "^2.0.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
+    "form": "^0.2.4",
+    "formidable": "^1.1.1",
     "gd-bmp": "^1.2.4",
     "mongoose": "^5.0.2"
   },

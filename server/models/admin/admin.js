@@ -8,7 +8,7 @@ const AdminSchema = new Schema({
   password: { type: String, isRequire: true },
   mobile: { unqie: true, type: String, isRequire: true },
   roles: { type: String, isRequire: true, default: 1},
-  status: { type: String, isRequire: true }
+  status: { type: String, isRequire: true, default: 'info' }
 });
 
 AdminSchema.index({ id: 1 });

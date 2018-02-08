@@ -20,7 +20,6 @@ class Authorized extends React.Component {
   }
   async isSignin() {
     const res = await getAdminInfoApi();
-
     if (res.status === 1) {
       this.props.load(res.data);
     } else {
