@@ -43,6 +43,7 @@ $ npm run start:server 启动数据端
   - `classnames`
   - `omit.js`
   - `react`
+  - `react-container-query`
   - `react-document-title`
   - `react-dom`
   - `react-redux`
@@ -52,11 +53,14 @@ $ npm run start:server 启动数据端
 
 ### 数据端
   
+  - `bcryptjs`
   - `chalk`
   - `connect-mongo`
   - `cookie-parser`
   - `express`
   - `express-session`
+  - `form`
+  - `formidable`
   - `gd-bmp`
   - `mongoose`
 

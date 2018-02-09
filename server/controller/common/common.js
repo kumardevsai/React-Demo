@@ -55,7 +55,7 @@ class Common extends BaseComponent {
 
       console.log(code);
 
-      req.session.msg_code = {
+      req.session.msg_token = {
         mobile,
         code,
         time: Date.now()

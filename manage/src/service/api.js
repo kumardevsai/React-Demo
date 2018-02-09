@@ -13,7 +13,7 @@ export const getMsgCaptchaApi = mobile => fetch('/common/msgcaptcha', mobile);
 /*
 * 管理员登录
 */
-export const signinApi = (adminInfo) => fetch('/admin/signin', adminInfo, 'POST');
+export const signinApi = info => fetch('/admin/signin', info, 'POST');
 
 /*
 * 管理员申请

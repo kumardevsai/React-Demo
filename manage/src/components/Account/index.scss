@@ -1,4 +1,4 @@
-.signin {
+.account {
   .tabs {
     padding: 0 2px;
     margin: 0 -2px;
@@ -22,6 +22,12 @@
   .prefixIcon {
     font-size: 14px;
     color: rgba(0,0,0,.25);
+  }
+  .picCaptcha {
+    display: block;
+    width: 100%;
+    border-radius: 4px;
+    border: 1px solid #d9d9d9;
   }
   .submit {
     margin-top: 24px;

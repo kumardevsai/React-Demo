@@ -8,10 +8,10 @@ const map = {
     props: {
       size: 'large',
       prefix: <Icon type="user" className={styles.prefixIcon} />,
-      placeholder: '请输入账户名！'
+      placeholder: '请输入管理员账户'
     },
     rules: [{
-      required: true, message: '请输入账户名！'
+      required: true, message: '请输入账户名'
     }]
   },
   Password: {
@@ -19,11 +19,20 @@ const map = {
     props: {
       size: 'large',
       prefix: <Icon type="lock" className={styles.prefixIcon} />,
-      placeholder: '请输入密码！'
+      type: 'password',
+      placeholder: '请输入密码'
     },
     rules: [{
-      required: true, message: '请输入密码！'
+      required: true, message: '请输入密码'
     }]
+  },
+  Comfimp: {
+    component: Input,
+    props: {
+      size: 'large',
+      type: 'password',
+      placeholder: '请再次输入密码'
+    }
   },
   Mobile: {
     component: Input,
@@ -36,17 +45,6 @@ const map = {
       required: true, message: '请输入手机号！'
     }, {
       pattern: /^1[3, 5, 7, 8, 9]\d{9}$/, message: '手机号格式错误！'
-    }]
-  },
-  Captcha: {
-    component: Input,
-    props: {
-      size: 'large',
-      prefix: <Icon type="info-circle" className={styles.prefixIcon} />,
-      placeholder: '验证码'
-    },
-    rules: [{
-      required: true, message: '请输入验证码'
     }]
   }
 }

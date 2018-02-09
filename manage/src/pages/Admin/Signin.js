@@ -1,27 +1,30 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Alert, Checkbox, Icon } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import styles from './Signin.scss';
-import Signin from '@/components/Signin';
-import { connect } from 'react-redux';
+import Account from '@/components/Account';
+import { signinFunc } from '@/store/signin.reducer';
 
-const { Tab, Username, Password, Mobile, Captcha, Submit } = Signin;
+const { Tab, Username, Password, Pic, Mobile, Msg, Submit } = Account;
 
 @connect(
-  state => state.admin
+  state => state.signin,
+  { signinFunc }
 )
 export default class SigninPage extends Component {
   state = {
-    type: 'accout',
-    autoSignin: true
+    type: 'account',
+    autoSignin: true,
+    error: ''
   }
 
-  onTabChange(type) {
-    this.setState({ type });
-  }
-
-  handleSubmit () {
-    console.log(1);
+  handleSubmit(err, values) {
+    if (!err) {
+      const { type } = this.state;
+      const info = { ...values, type };
+      this.props.signinFunc(info);
+    }
   }
 
   changeAutoSignin(e) {
@@ -37,36 +40,46 @@ export default class SigninPage extends Component {
   }
 
   render() {
-    const { admin_r } = this.props;
-    const { type } = this.state;
+    const { storeStatus, storeType, storeError } = this.props;
+    const { type, autoSignin } = this.state; 
     return (
       <div className={styles.main}>
-        { admin_r && <Redirect to='/' /> }
-        <Signin
+        { storeStatus === 'success' && <Redirect to="/" /> }
+        <Account
           defaultActiveKey={type}
-          onTabChange={this.onTabChange.bind(this)}
           onSubmit={this.handleSubmit.bind(this)}
         >
-          <Tab key="accout" tab="账户密码登录">
-            <Username name="usernmae" placeholder="请输入管理员账号" />
-            <Password name="password" placeholder="请输入管理员密码" />
+          <Tab key="account" tab="账户密码登录">
+            {
+              storeStatus === 'error' &&
+              storeType === 'account' &&
+              this.renderMessage(storeError)
+            }
+            <Username name="username" />
+            <Password name="password" />
+            <Pic name="pic_token_a" />
           </Tab>
           <Tab key="mobile" tab="手机号登录">
+            {
+              storeStatus === 'error' &&
+              storeType === 'mobile' &&
+              this.renderMessage(storeError)
+            }
             <Mobile name="mobile" />
-            <Captcha name="captcha" />
+            <Pic name="pic_token_b" />
+            <Msg name="msg_captch" pic="pic_captcha" />
           </Tab>
           <div>
-            <Checkbox checked={this.state.autoSignin} onChange={this.changeAutoSignin.bind(this)}>自动登录</Checkbox>
+            <Checkbox checked={autoSignin} onChange={this.changeAutoSignin.bind(this)}>自动登录</Checkbox>
             <Link style={{ float: 'right' }} to="/admin/forget">忘记密码</Link>
           </div>
           <Submit>登录</Submit>
           <div className={styles.other}>
             其他登录方式
-            <Icon className={styles.icon} type="alipay-circle" />
             <Icon className={styles.icon} type="wechat" />
             <Link className={styles.signup} to="/admin/signup">申请管理员</Link>
           </div>
-        </Signin>
+        </Account>
       </div>
     );
   }

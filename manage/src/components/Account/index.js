@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Form, Tabs } from 'antd';
-import SigninItem from './SigninItem';
-import SigninTab from './SigninTab';
-import SigninSubmit from './SigninSubmit';
+import AccTab from './AccTab';
+import AccItem from './AccItem';
+import AccPic from './AccPic';
+import AccMsg from './AccMsg';
+import AccSubmit from './AccSubmit';
 import styles from './index.scss';
 
 @Form.create()
-class Signin extends Component {
+class Account extends Component {
   static defaultProps = {
     className: '',
     defaultActiveKey: '',
@@ -19,18 +21,19 @@ class Signin extends Component {
     className: PropTypes.string,
     defaultActiveKey: PropTypes.string,
     onTabChange: PropTypes.func,
-    onSubmit: PropTypes.func,
+    onSubmit: PropTypes.func
   };
   static childContextTypes = {
     tabUtil: PropTypes.object,
     form: PropTypes.object,
-    updateActive: PropTypes.func,
+    updateActive: PropTypes.func
   };
   state = {
     type: this.props.defaultActiveKey,
     tabs: [],
     active: {}
   };
+
   getChildContext() {
     return {
       tabUtil: {
@@ -43,7 +46,7 @@ class Signin extends Component {
           this.setState({
             tabs: this.state.tabs.filter(currentId => currentId !== id),
           });
-        },
+        }
       },
       form: this.props.form,
       updateActive: (activeItem) => {
@@ -53,27 +56,23 @@ class Signin extends Component {
         } else {
           active[type] = [activeItem];
         }
-        this.setState({
-          active,
-        });
-      },
+        this.setState({ active });
+      }
     };
   }
 
-
-  componentDidMount() {
-    // console.log(this.props);
-  }
-
   onSwitch(type) {
-    this.setState({
-      type
-    });
+    this.setState({ type });
     this.props.onTabChange(type);
   }
 
-  handleSubmit() {
-    console.log(1);
+  handleSubmit(e) {
+    e.preventDefault();
+    const { active, type } = this.state;
+    const activeFileds = active[type];
+    this.props.form.validateFields(activeFileds, { force: true }, (err, values) => {
+      this.props.onSubmit(err, values);
+    });
   }
 
   render() {
@@ -85,15 +84,15 @@ class Signin extends Component {
       if (!item) {
         return;
       }
-      if (item.type.__QZ_SIGNIN_TAB) {
+      if (item.type.__QZ_ACC_TAB) {
         TabChildren.push(item);
       } else {
         OtherChildren.push(item);
       }
     });
     return (
-      <div className={classNames(className, styles.signin)}>
-        <Form onSubmit={this.handleSubmit}>
+      <div className={classNames(className, styles.account)}>
+        <Form onSubmit={this.handleSubmit.bind(this)}>
           {
             tabs.length ? (
               <div>
@@ -115,10 +114,12 @@ class Signin extends Component {
   }
 }
 
-Signin.Tab = SigninTab;
-Signin.Submit = SigninSubmit;
-Object.keys(SigninItem).forEach(item => {
-  Signin[item] = SigninItem[item];
+Account.Tab = AccTab;
+Account.Pic = AccPic;
+Account.Msg = AccMsg; 
+Account.Submit = AccSubmit;
+Object.keys(AccItem).forEach(item => {
+  Account[item] = AccItem[item];
 });
 
-export default Signin;
+export default Account;

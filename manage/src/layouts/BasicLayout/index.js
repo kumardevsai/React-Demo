@@ -36,7 +36,6 @@ class BasicLayout extends PureComponent {
   render() {
     const layout = (
       <Layout>
-        <Authorized />
         <SliderMenu
 
         />
@@ -57,7 +56,7 @@ class BasicLayout extends PureComponent {
     return (
       <DocumentTitle title="hhh">
         <ContainerQuery query={query}>
-          {parmas => <div className={classNames(parmas)}>{layout}</div>}
+          { parmas => (<div className={classNames(parmas)}><Authorized />{layout}</div>) }
         </ContainerQuery>
       </DocumentTitle>
     );

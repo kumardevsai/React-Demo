@@ -12,11 +12,101 @@ class Admin extends BaseComponent {
   }
 
   getInfo(req, res) {
-    
+    // const { admin } = req.session;
+    // if (admin) {
+    //   return res.send({
+    //     status: 1,
+    //     data: admin
+    //   });
+    // } else {
+    //   return res.send({
+    //     status: 0,
+    //     type: 'ERROR_GET_ADMIN_INFO',
+    //     message: '尚未登录'
+    //   });
+    // }
+    res.send({ status: 1, data: {} });
   }
 
   signin(req, res) {
+    const form = new formidable.IncomingForm();
+    form.parse(req, async (err, fields, files) => {
+      if (err) {
+        return res.send({
+          status: 0,
+          type: 'ERROR_PARMAS',
+          message: '参数解析失败'
+        });
+      }
 
+      const { username, password, pic_token_a, type, mobile, pic_token_b, msg_captch } = fields;
+
+      if (type === 'account') {
+        try {
+          if (!username) {
+            throw new Error('用户名不能为空');
+          } else if (!password) {
+            throw new Error('密码不能为空');
+          }
+        } catch(err) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_SIGNIN_PARMAS',
+            message: err.message
+          });
+        }
+
+        const admin = await AdminModel.findOne({ username });
+
+        if (!admin) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_ADMIN_IS_NOT_EXITS',
+            message: '管理员账户不存在'
+          });
+        }
+
+        const isMatch = await bcrypt.compare(password, admin.password);
+
+        if (!isMatch) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_PASS_IS_NOT_MATCH',
+            message: '管理员密码错误'
+          });
+        } else {
+          return res.send({
+            status: 1
+          });
+        }
+      } else if (type === 'mobile') {
+        try {
+          if (!mobile) {
+            throw new Error('手机号不能为空');
+          }
+        } catch(err) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_SIGNIN_PARMAS',
+            message: err.message
+          });
+        }
+
+        const admin = await AdminModel.findOne({ mobile });
+
+        if (!admin) {
+          return res.send({
+            status: 0,
+            type: 'ERROR_ADMIN_IS_NOT_EXITS',
+            message: '管理员账户不存在'
+          });
+        } else {
+          return res.send({
+            status: 1
+          });
+        }
+      }
+    });
   }
 
   signup(req, res) {
@@ -85,6 +175,7 @@ class Admin extends BaseComponent {
       try {
         await AdminModel.create(admin_model);
         const adminInfo = await AdminModel.findOne({ id: admin_id }, '-__v -_id -password -create_at');
+        req.session.admin = adminInfo;
         return res.send({
           status: 1,
           data: adminInfo

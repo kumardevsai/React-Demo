@@ -12,14 +12,14 @@ const generateId = (() => {
   };
 })();
 
-export default class SigninTab extends Component {
-  static __QZ_SIGNIN_TAB = true;
+export default class AccTab extends Component {
+  static __QZ_ACC_TAB = true;
   static contextTypes = {
     tabUtil: PropTypes.object
   };
   constructor(props) {
     super(props);
-    this.uniqueId = generateId('signin-tab-');
+    this.uniqueId = generateId('account-tab-');
   }
   componentWillMount() {
     if (this.context.tabUtil) {
