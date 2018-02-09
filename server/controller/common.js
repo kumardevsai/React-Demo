@@ -1,5 +1,5 @@
-import BaseComponent from '../../prototype/BaseComponent';
-import AdminModel from '../../models/admin/admin';
+import BaseComponent from '../prototype/BaseComponent';
+import AdminModel from '../models/admin';
 
 class Common extends BaseComponent {
   constructor() {

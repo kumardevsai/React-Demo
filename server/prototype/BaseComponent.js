@@ -6,13 +6,13 @@ const BMP24 = require('gd-bmp').BMP24;
 
 export default class BaseComponent {
   constructor() {
-    this.idList = ['admin_id'];
+    this.idList = ['admin_id', 'user_id', 'genre_id', 'post_id', 'mood_id'];
   }
 
   async getId(type) {
     if (!this.idList.includes(type)) {
       console.error(`${type} ${chalk.redBright('Id 类型错误!')}`);
-      return false
+      return false;
     }
     try {
       const idData = await Ids.findOne();
