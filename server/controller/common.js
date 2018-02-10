@@ -25,7 +25,7 @@ class Common extends BaseComponent {
   }
 
   async getMsgCaptcha(req, res) {
-    const { mobile } = req.query;
+    const { mobile, type } = req.query;
     if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
       return res.send({
         status: 0,
@@ -35,7 +35,16 @@ class Common extends BaseComponent {
     }
 
     const admin = await AdminModel.findOne({ mobile });
-    if (admin) {
+
+    if (type === 'signin' && !admin) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_MOBILE_NOT_EXIST',
+        message: '该手机号尚未成为管理员'
+      });
+    }
+
+    if (type === 'signup' && admin) {
       return res.send({
         status: 0,
         type: 'ERROR_MOBILE_EXIST',

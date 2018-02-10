@@ -27,6 +27,12 @@ export default class SigninPage extends Component {
     }
   }
 
+  getError(msg) {
+    if (msg) {
+      this.setState({ error: msg });
+    }
+  }
+
   changeAutoSignin(e) {
     this.setState({
       autoSignin: e.target.checked
@@ -41,7 +47,7 @@ export default class SigninPage extends Component {
 
   render() {
     const { storeStatus, storeType, storeError } = this.props;
-    const { type, autoSignin } = this.state; 
+    const { type, autoSignin, error } = this.state; 
     return (
       <div className={styles.main}>
         { storeStatus === 'success' && <Redirect to="/" /> }
@@ -57,17 +63,20 @@ export default class SigninPage extends Component {
             }
             <Username name="username" />
             <Password name="password" />
-            <Pic name="pic_token_a" />
+            <Pic name="acc_pic" />
           </Tab>
           <Tab key="mobile" tab="手机号登录">
+            {
+              error && this.renderMessage(error)
+            }
             {
               storeStatus === 'error' &&
               storeType === 'mobile' &&
               this.renderMessage(storeError)
             }
             <Mobile name="mobile" />
-            <Pic name="pic_token_b" />
-            <Msg name="msg_captch" pic="pic_captcha" />
+            <Pic name="mobile_pic" />
+            <Msg mobile="mobile" pic="mobile_pic" getError={this.getError.bind(this)} />
           </Tab>
           <div>
             <Checkbox checked={autoSignin} onChange={this.changeAutoSignin.bind(this)}>自动登录</Checkbox>

@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "qz-demo",
+  "name": "react-demo",
   "version": "1.0.0",
   "description": "React + Redux + Express + MongoDB + Antd + Purely ===> 构建文章社区！",
   "workspaces": [

@@ -7,6 +7,12 @@ import { getPicCaptchaApi } from '@/service/api';
 const FormItem = Form.Item;
 
 export default class AccPic extends Component {
+  static defaultProps = {
+    name: 'pic_captcha'
+  };
+  static propTypes = {
+    name: PropTypes.string
+  };
   static contextTypes = {
     form: PropTypes.object,
     updateActive: PropTypes.func
@@ -15,16 +21,14 @@ export default class AccPic extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pic_name: '',
-      pic_url: '',
-      pic_token: '',
-      pic_time: null
+      url: '',
+      token: '',
+      time: null
     }
   }
 
   componentWillMount() {
     this.onGetPicCaptcha();
-    this.setState({ pic_name: this.props.name })
   }
 
   componentDidMount() {
@@ -37,15 +41,15 @@ export default class AccPic extends Component {
     const res = await getPicCaptchaApi();
     if (res.status === 1) {
       this.setState({
-        pic_url: res.data.url,
-        pic_token: res.data.token,
-        pic_time: Date.now()
+        url: res.data.url,
+        token: res.data.token,
+        time: Date.now()
       });
     } else {
       this.setState({
-        pic_url: '',
-        pic_token: '',
-        pic_time: null
+        url: '',
+        token: '',
+        time: null
       });
     }
   }
@@ -53,7 +57,7 @@ export default class AccPic extends Component {
   async changeGetCaptcha() {
     await this.onGetPicCaptcha();
     const { form } = this.context;
-    form.validateFields(['pic_captcha'], { force: true });
+    form.validateFields([this.props.name], { force: true });
   }
 
 
@@ -63,11 +67,11 @@ export default class AccPic extends Component {
     } else if (value.length !== 5) {
       callback('图形验证码必须是5位');
     } else {
-      const { pic_time, pic_token } = this.state;
-      if (value.toLowerCase() !== pic_token.toLowerCase()) {
+      const { time, token } = this.state;
+      if (value.toLowerCase() !== token.toLowerCase()) {
         callback('图形验证码错误，请重新输入');
       }
-      if ((Date.now() - pic_time) / (1000 * 60) > 5) {
+      if ((Date.now() - time) / (1000 * 60) > 5) {
         callback('图形验证码已经失效，请重新获取');
       }
       callback();
@@ -76,14 +80,14 @@ export default class AccPic extends Component {
 
   render() {
     const { getFieldDecorator } = this.context.form;
-    const { pic_url, pic_name } = this.state;
-    const { ...restProps } = this.props;
+    const { url } = this.state;
+    const { name, ...restProps } = this.props;
     return (
       <FormItem>
         <Row gutter={8}>
           <Col span={16}>
             {
-              getFieldDecorator(pic_name, {
+              getFieldDecorator(name, {
                 rules: [{
                   validator: this.checkPicCode.bind(this)
                 }]
@@ -93,7 +97,7 @@ export default class AccPic extends Component {
           <Col span={8}>
             <img
               className={styles.picCaptcha}
-              src={pic_url}
+              src={url}
               onClick={this.changeGetCaptcha.bind(this)}
               alt="图形验证码"
             />

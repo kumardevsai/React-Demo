@@ -18,8 +18,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "supervisor index.js",
-    "lint": "eslint mongodb config"
+    "start": "supervisor index.js"
   },
   "babel": {
     "presets": [

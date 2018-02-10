@@ -7,6 +7,18 @@ import { getMsgCaptchaApi } from '@/service/api';
 const FormItem = Form.Item;
 
 export default class AccMsg extends Component {
+  static defaultProps = {
+    type: 'signin',
+    name: 'msg_captch',
+    pic: 'pic_captch'
+  };
+  static propTypes = {
+    type: PropTypes.oneOf(['signin', 'signup']),
+    name: PropTypes.string,
+    pic: PropTypes.string,
+    mobile: PropTypes.string.isRequired,
+    getError: PropTypes.func.isRequired
+  };
   static contextTypes = {
     form: PropTypes.object,
     updateActive: PropTypes.func
@@ -15,17 +27,8 @@ export default class AccMsg extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      count: 0,
-      msg_name: '',
-      pic_name: ''
+      count: 0
     }
-  }
-
-  componentWillMount() {
-    this.setState({
-      msg_name: this.props.name,
-      pic_name: this.props.pic
-    });
   }
 
   componentDidMount() {
@@ -40,11 +43,10 @@ export default class AccMsg extends Component {
 
   onGetMsgCaptcha() {
     const { form } = this.context;
-    const { pic_name } = this.state;
-    form.validateFields(['mobile', pic_name], { force: true }, async (err, values) => {
+    const { type, pic, mobile } = this.props;
+    form.validateFields([pic, mobile], { force: true }, async (err, values) => {
       if (!err) {
-        const res = await getMsgCaptchaApi({ mobile: values.mobile });
-        console.log(res);
+        const res = await getMsgCaptchaApi({ mobile: values.mobile, type });
         if (res.status === 1) {
           let count = 59;
           this.setState({ count });
@@ -55,6 +57,8 @@ export default class AccMsg extends Component {
               clearInterval(this.interval);
             }
           }, 1000);
+        } else {
+          this.props.getError(res.message);
         }
       }
     });
@@ -62,13 +66,14 @@ export default class AccMsg extends Component {
 
   render() {
     const { getFieldDecorator } = this.context.form;
-    const { msg_name, count } = this.state;
+    const { count } = this.state;
+    const { name } = this.props;
     return (
       <FormItem>
         <Row gutter={8}>
           <Col span={16}>
             {
-              getFieldDecorator(msg_name, {
+              getFieldDecorator(name, {
                 rules: [{
                   required: true,
                   message: '短信验证码不能为空'

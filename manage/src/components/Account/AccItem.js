@@ -22,7 +22,7 @@ function generator({ defaultProps, defaultRules, type}) {
       render() {
         const { getFieldDecorator } = this.context.form;
         const options = {};
-        const { onChange, defaultValue, rules, name, src, ...restProps } = this.props;
+        const { onChange, defaultValue, rules, name, ...restProps } = this.props;
         options.rules = rules || defaultRules;
         if (onChange) {
           options.onChange = onChange;

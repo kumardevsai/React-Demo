@@ -26,7 +26,7 @@ const map = {
       required: true, message: '请输入密码'
     }]
   },
-  Comfimp: {
+  Comfirmp: {
     component: Input,
     props: {
       size: 'large',

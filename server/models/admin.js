@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const Schema = mongoose.Schema;
 
@@ -17,6 +18,7 @@ const Admin = mongoose.model('Admin', AdminSchema);
 
 Admin.findOne((err, data) => {
   if (!data) {
+
     const rootAdmin = new Admin({
       id: 0,
       username: 'qingzhan',
