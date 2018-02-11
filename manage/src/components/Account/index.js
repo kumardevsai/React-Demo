@@ -6,6 +6,7 @@ import AccTab from './AccTab';
 import AccItem from './AccItem';
 import AccPic from './AccPic';
 import AccMsg from './AccMsg';
+import AccComfirm from './AccComfirm';
 import AccSubmit from './AccSubmit';
 import styles from './index.scss';
 
@@ -117,6 +118,7 @@ class Account extends Component {
 Account.Tab = AccTab;
 Account.Pic = AccPic;
 Account.Msg = AccMsg; 
+Account.Comfirmp = AccComfirm;
 Account.Submit = AccSubmit;
 Object.keys(AccItem).forEach(item => {
   Account[item] = AccItem[item];

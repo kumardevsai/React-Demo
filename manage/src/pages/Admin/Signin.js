@@ -4,12 +4,14 @@ import { Alert, Checkbox, Icon } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import styles from './Signin.scss';
 import Account from '@/components/Account';
-import { signinFunc } from '@/store/signin.reducer';
+import { signinFunc } from '@/store/account.reducer';
 
 const { Tab, Username, Password, Pic, Mobile, Msg, Submit } = Account;
 
 @connect(
-  state => state.signin,
+  ({ account }) => ({
+    account: account
+  }),
   { signinFunc }
 )
 export default class SigninPage extends Component {
@@ -21,8 +23,8 @@ export default class SigninPage extends Component {
 
   handleSubmit(err, values) {
     if (!err) {
-      const { type } = this.state;
-      const info = { ...values, type };
+      const { type, autoSignin } = this.state;
+      const info = { ...values, type, autoSignin };
       this.props.signinFunc(info);
     }
   }
@@ -45,21 +47,33 @@ export default class SigninPage extends Component {
     );
   }
 
+  renderRedirect(status) {
+    if (status === 'success') {
+      return <Redirect to="/" />
+    } else if (status === 'audit' || status === 'reject') {
+      return <Redirect to="/admin/acc-result" />
+    } else {
+      return null;
+    }
+  }
+
   render() {
-    const { storeStatus, storeType, storeError } = this.props;
+    const { account } = this.props;
     const { type, autoSignin, error } = this.state; 
     return (
       <div className={styles.main}>
-        { storeStatus === 'success' && <Redirect to="/" /> }
         <Account
           defaultActiveKey={type}
           onSubmit={this.handleSubmit.bind(this)}
         >
+          {
+            this.renderRedirect(account.status)
+          }
           <Tab key="account" tab="账户密码登录">
             {
-              storeStatus === 'error' &&
-              storeType === 'account' &&
-              this.renderMessage(storeError)
+              account.status === 'error' &&
+              account.type === 'account' &&
+              this.renderMessage(account.error)
             }
             <Username name="username" />
             <Password name="password" />
@@ -70,19 +84,19 @@ export default class SigninPage extends Component {
               error && this.renderMessage(error)
             }
             {
-              storeStatus === 'error' &&
-              storeType === 'mobile' &&
-              this.renderMessage(storeError)
+              account.status === 'error' &&
+              account.type === 'mobile' &&
+              this.renderMessage(account.error)
             }
             <Mobile name="mobile" />
             <Pic name="mobile_pic" />
-            <Msg mobile="mobile" pic="mobile_pic" getError={this.getError.bind(this)} />
+            <Msg type="signin" pic="mobile_pic" getError={this.getError.bind(this)} />
           </Tab>
-          <div>
+          <div className={styles.operating}>
             <Checkbox checked={autoSignin} onChange={this.changeAutoSignin.bind(this)}>自动登录</Checkbox>
             <Link style={{ float: 'right' }} to="/admin/forget">忘记密码</Link>
           </div>
-          <Submit>登录</Submit>
+          <Submit text="登录" />
           <div className={styles.other}>
             其他登录方式
             <Icon className={styles.icon} type="wechat" />

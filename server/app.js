@@ -50,5 +50,5 @@ app.use(session({
 router(app);
 
 app.listen(config.port, () => {
-  console.log(`  qz-demo service start!`);
+  console.log(`  React-Demo service start!`);
 });

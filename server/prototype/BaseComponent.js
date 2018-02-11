@@ -34,7 +34,7 @@ export default class BaseComponent {
     let token = '';
     img.fillRect(0, 0, 117, 40, '0xffffff');
     
-    const p = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const p = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789';
 
     for (let i=0; i < 5; i ++) {
       token += p.charAt(Math.random() * p.length | 0 );

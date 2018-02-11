@@ -9,7 +9,7 @@ const AdminSchema = new Schema({
   password: { type: String, isRequire: true },
   mobile: { unqie: true, type: String, isRequire: true },
   roles: { type: String, isRequire: true, default: 1},
-  status: { type: String, isRequire: true, default: 'info' }
+  status: { type: String, isRequire: true, default: 'audit' }
 });
 
 AdminSchema.index({ id: 1 });
@@ -18,11 +18,12 @@ const Admin = mongoose.model('Admin', AdminSchema);
 
 Admin.findOne((err, data) => {
   if (!data) {
-
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync('123456', salt);
     const rootAdmin = new Admin({
       id: 0,
       username: 'qingzhan',
-      password: 'a123456',
+      password: hash,
       mobile: '18788888888',
       roles: 101,
       status: 'success'

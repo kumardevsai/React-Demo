@@ -8,15 +8,15 @@ const FormItem = Form.Item;
 
 export default class AccMsg extends Component {
   static defaultProps = {
-    type: 'signin',
-    name: 'msg_captch',
-    pic: 'pic_captch'
+    name: 'msg_captcha',
+    pic: 'pic_captcha',
+    mobile: 'mobile'
   };
   static propTypes = {
     type: PropTypes.oneOf(['signin', 'signup']),
     name: PropTypes.string,
     pic: PropTypes.string,
-    mobile: PropTypes.string.isRequired,
+    mobile: PropTypes.string,
     getError: PropTypes.func.isRequired
   };
   static contextTypes = {

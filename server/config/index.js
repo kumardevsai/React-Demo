@@ -1,9 +1,9 @@
 export default {
   port: 3002,
-  mongodb: 'mongodb://localhost/qz-demo',
+  mongodb: 'mongodb://localhost/react-demo',
   session: {
-    key: 'qz',
-    secret: 'qz-demo',
+    key: 'react',
+    secret: 'react-demo',
     cookie: {
       httpOnly: true,
       secure: false,

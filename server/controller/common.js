@@ -11,12 +11,16 @@ class Common extends BaseComponent {
   getPicCaptcha(req, res) {
     try {
       const picCaptcha = this.drawCode();
-      res.send({
+      req.session.pic_token = {
+        token: picCaptcha.token,
+        time: Date.now()
+      }
+      return res.send({
         status: 1,
         data: picCaptcha
       })
     } catch (err) {
-      res.send({
+      return res.send({
         status: 0,
         type: 'ERROR_GET_PIC_CAPTCHA',
         message: '获取图形验证码失败'
@@ -64,7 +68,7 @@ class Common extends BaseComponent {
 
       console.log(code);
 
-      req.session.msg_token = {
+      req.session.msg_code = {
         mobile,
         code,
         time: Date.now()

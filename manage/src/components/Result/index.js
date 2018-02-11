@@ -8,9 +8,9 @@ export default function Result({
 }) {
   const iconMap = {
     error: <Icon className={styles.error} type="close-circle" />,
-    warn: <Icon className={styles.warn} type="exclamation-circle" />,
+    normal: <Icon className={styles.info} type="info-circle" />,
+    warning: <Icon className={styles.warn} type="exclamation-circle" />,
     success: <Icon className={styles.success} type="check-circle" />,
-    info: <Icon className={styles.info} type="info-circle" />,
   }
   const clsString = classNames(styles.result, className);
   return (

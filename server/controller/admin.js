@@ -12,11 +12,12 @@ class Admin extends BaseComponent {
   }
 
   getInfo(req, res) {
-    // const { admin } = req.session;
+    // const { admin, autoSignin } = req.session;
     // if (admin) {
     //   return res.send({
     //     status: 1,
-    //     data: admin
+    //     data: admin,
+    //     autoSignin: autoSignin
     //   });
     // } else {
     //   return res.send({
@@ -25,7 +26,7 @@ class Admin extends BaseComponent {
     //     message: '尚未登录'
     //   });
     // }
-    res.send({ status: 1, data: {} });
+    return res.send({ status: 1, data: {username: 'qingzhan', password: 'lala', role: 'hhh', status: 'success'} });
   }
 
   signin(req, res) {
@@ -39,7 +40,8 @@ class Admin extends BaseComponent {
         });
       }
 
-      const { username, password, pic_token_a, type, mobile, pic_token_b, msg_captch } = fields;
+      const { username, password, acc_pic, type, mobile, mobile_pic, msg_captch, autoSignin } = fields;
+      const { pic_token, msg_code } = req.session;
 
       if (type === 'account') {
         try {
@@ -47,6 +49,10 @@ class Admin extends BaseComponent {
             throw new Error('用户名不能为空');
           } else if (!password) {
             throw new Error('密码不能为空');
+          } else if (!acc_pic || acc_pic.toLowerCase() !== pic_token.token.toLowerCase()) {
+            throw new Error('图形验证码错误');
+          } else if ((Date.now() - pic_token.time) / (1000 * 60) > 5) {
+            throw new Error('图形验证码已失效，请重新获取');
           }
         } catch(err) {
           return res.send({
@@ -56,7 +62,7 @@ class Admin extends BaseComponent {
           });
         }
 
-        const admin = await AdminModel.findOne({ username });
+        const admin = await AdminModel.findOne({ username }, '-_id -__v');
 
         if (!admin) {
           return res.send({
@@ -66,23 +72,23 @@ class Admin extends BaseComponent {
           });
         }
 
-        if (username === 'qingzhan' && password === 'a123456') {
-          return res.send({
-            status: 1
-          });
-        }
-
         const isMatch = await bcrypt.compare(password, admin.password);
 
-        if (!isMatch) {
+        if (isMatch) {
+          if (admin.status === 'success') {
+            return res.send({ status: 1, acc_pic: admin.username });
+          } else if (admin.status === 'audit') {
+            return res.send({ status: 2, account: admin.username });
+          } else if (admin.status === 'success') {
+            return res.send({ status: 3, reasion: admin.reasion });
+          } else {
+            throw new Error('未找到此状态');
+          }
+        } else {
           return res.send({
             status: 0,
             type: 'ERROR_PASS_IS_NOT_MATCH',
             message: '管理员密码错误'
-          });
-        } else {
-          return res.send({
-            status: 1
           });
         }
       } else if (type === 'mobile') {
@@ -127,14 +133,16 @@ class Admin extends BaseComponent {
       }
 
       const { msg_code } = req.session;
-      const { username, password, mobile, mob_captcha } = fields;
+      const { username, password, mobile, msg_captcha } = fields;
 
       try {
-        if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
+        if (!msg_code) {
+          throw new Error('尚未获取短信验证码');
+        } else if (!mobile || !/^1[3,5,7,8,9]\d{9}$/.test(mobile)) {
           throw new Error('请输入正确的手机号');
         } else if (mobile !== msg_code.mobile) {
           throw new Error('接收验证码的手机号与提交的手机号不对应');
-        } else if (!mob_captcha || mob_captcha !== msg_code.code) {
+        } else if (!msg_captcha || msg_captcha !== msg_code.code) {
           throw new Error('短信验证码错误，请重新输入');
         } else if ((Date.now() - msg_code.time) / (1000 * 60) > 5) {
           throw new Error('短信验证码已失效，请重新获取');

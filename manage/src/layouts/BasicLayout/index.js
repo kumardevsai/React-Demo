@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 // import { Switch } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
-import { Layout } from 'antd';
-import Authorized from '@/components/Authorized';
+import { Layout, Icon } from 'antd';
+import { changeLayoutCollapsed } from '@/store/global.reducer';
 import GlobalHeader from '@/components/GlobalHeader';
 import GlobalFooter from '@/components/GlobalFooter';
 import SliderMenu from '@/components/SliderMenu';
@@ -32,22 +33,56 @@ const query = {
   },
 };
 
+@connect(
+  ({ admin, global}) => ({
+    currentAdmin: admin,
+    collapsed: global.collapsed
+  }),
+  { changeLayoutCollapsed }
+)
 class BasicLayout extends PureComponent {
+  handleMenuCollapse(collapsed) {
+    this.props.changeLayoutCollapsed(collapsed);
+  }
+
   render() {
+    const { collapsed, currentAdmin } = this.props;
+
     const layout = (
       <Layout>
         <SliderMenu
-
+          collapsed={collapsed}
+          onCollapse={this.handleMenuCollapse.bind(this)}
         />
         <Layout>
-          <GlobalHeader 
-
+          <GlobalHeader
+            currentAdmin={currentAdmin}
+            collapsed={collapsed}
+            onCollapse={this.handleMenuCollapse.bind(this)}
           />
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
-            Content
+            hhh
           </Content>
-          <GlobalFooter 
-
+          <GlobalFooter
+            links={
+              [{
+                key: 'home',
+                title: '首页',
+                href: ''
+              },{
+                key: 'help',
+                title: '帮助',
+                href: ''
+              },{
+                key: 'github',
+                title: 'GITHUB',
+                href: 'https://github.com/yudaren007007/React-Demo',
+                blankTarget: true
+              }]
+            }
+            copyright={
+              <div>Copyright <Icon type="copyright" /> 2018 青湛鼎力出品.</div>
+            }
           />
         </Layout>
       </Layout>
@@ -56,7 +91,7 @@ class BasicLayout extends PureComponent {
     return (
       <DocumentTitle title="hhh">
         <ContainerQuery query={query}>
-          { parmas => (<div className={classNames(parmas)}><Authorized />{layout}</div>) }
+          { parmas => (<div className={classNames(parmas)}>{layout}</div>) }
         </ContainerQuery>
       </DocumentTitle>
     );

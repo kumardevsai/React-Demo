@@ -1,65 +1,41 @@
-import { signupApi } from '@/service/api';
+import { getAdminInfoApi } from '@/service/api';
 
 const ERROR = 'ERROR';
 const SUCCESS = 'SUCCESS';
-const LOAD = 'LOAD';
 
-/*
-* 状态status_r
-* error 无
-* info 待审核
-* warn 被驳回
-* success 成功通过
-*/
-
-const initState = {
-  status_r: 'error',
-  error_r: null,
-  admin_r: null,
-  permissions_r: 'visitor'
+const init = {
+  error: ''
 };
 
 // reducer
-export function admin(state=initState, action) {
-  const { type, payload, data, status } = action;
-
+export function admin(state=init, action) {
+  const { type, payload } = action;
   switch(type) {
-    case LOAD:
-      return {...state, admin_r: payload };
     case SUCCESS:
-      return {...state, admin_r: data, status_r: status, permissions_r: 'admin' };
+      return {...state, ...payload };
     case ERROR:
-      return {...state, error_r: payload };
+      return {...state, error: payload };
     default:
       return state;
   }
 }
 
-function error(msg) {
-  return { type: ERROR, payload: msg };
-}
-
-function success(data, status) {
-  return { type: SUCCESS, data, status };
-}
-
-export function load(data) {
-  return { type: LOAD, payload: data };
-}
-
-export function signin(userInfo) {
-
-}
-
-export function signup(userInfo) {
+export function getAdminInfo() {
   return dispatch => {
-    signupApi(userInfo).then(res => {
-      console.log(res);
+    getAdminInfoApi().then(res => {
       if (res.status === 1) {
-        dispatch(success(res.data, 'info'));
+        dispatch(success(res.data));
       } else {
         dispatch(error(res.message));
       }
     });
   }
+}
+
+function success(data) {
+  return { type: SUCCESS, payload: data };
+}
+
+function error(msg) {
+  return { type: ERROR, payload: msg };
 }

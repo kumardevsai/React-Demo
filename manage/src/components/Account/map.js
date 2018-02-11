@@ -26,14 +26,6 @@ const map = {
       required: true, message: '请输入密码'
     }]
   },
-  Comfirmp: {
-    component: Input,
-    props: {
-      size: 'large',
-      type: 'password',
-      placeholder: '请再次输入密码'
-    }
-  },
   Mobile: {
     component: Input,
     props: {
@@ -42,9 +34,9 @@ const map = {
       placeholder: '手机号'
     },
     rules: [{
-      required: true, message: '请输入手机号！'
+      required: true, message: '请输入手机号'
     }, {
-      pattern: /^1[3, 5, 7, 8, 9]\d{9}$/, message: '手机号格式错误！'
+      pattern: /^1[3, 5, 7, 8, 9]\d{9}$/, message: '手机号格式错误'
     }]
   }
 }
