@@ -2,7 +2,7 @@
   "private": true,
   "name": "react-demo",
   "version": "1.0.0",
-  "description": "React + Redux + Express + MongoDB + Antd + Purely ===> 构建文章社区！",
+  "description": "React + Redux + Express + MongoDB + Antd + Purely ===> 构建文章社区(客户端、管理端、数据端)",
   "workspaces": [
     "client",
     "manage",
@@ -15,11 +15,11 @@
   },
   "author": {
     "name": "qingzhan",
-    "email": "yujunren1994@163.com"
+    "email": "qingzhan99@outlook.com"
   },
-  "homepage": "https://github.com/yudaren007007/qz-demo",
+  "homepage": "https://github.com/yudaren007007/React-Demo",
   "bugs": {
-    "url": "https://github.com/yudaren007007/qz-demo/issues"
+    "url": "https://github.com/yudaren007007/React-Demo/issues"
   },
   "license": "MIT"
 }

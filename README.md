@@ -1,4 +1,4 @@
-# qz-demo
+# React-Demo
 
 React + Redux + Express + MongoDB + Antd + Purely ==> (移动端)最佳实践！！构建技术社区前后端！！
 
@@ -17,17 +17,17 @@ React + Redux + Express + MongoDB + Antd + Purely ==> (移动端)最佳实践！
 如果你使用的是`yarn`的话，你可以直接在`qz-demo`根目录下安装所有依赖
 
 ```shell
-$ cd qz-demo
+$ cd React-Demo
 $ yarn
 ```
 如果你使用的是`npm`的话，需要大家分别进入三个子包`client`、`manage`和`server`去安装依赖。
 
 ```shell
-$ cd qz-demo/client
+$ cd React-Demo/client
 $ npm install
-$ cd qz-demo/manage
+$ cd React-Demo/manage
 $ npm install
-$ cd qz-demo/server
+$ cd React-Demo/server
 $ npm install
 ```
 
