@@ -1,4 +1,5 @@
 const CHANGE_LAYOUT_COLLAPSED = 'CHANGE_LAYOUT_COLLAPSED';
+
 const init = {
   collapsed: true
 }

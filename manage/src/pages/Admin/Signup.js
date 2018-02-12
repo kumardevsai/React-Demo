@@ -4,13 +4,13 @@ import { Link, Redirect } from 'react-router-dom';
 import { Alert } from 'antd';
 import Account from '@/components/Account';
 import styles from './Signup.scss';
-import { signupFunc } from '@/store/account.reducer';
+import { signupFunc } from '@/store/admin.reducer';
 
 const { Username, Password, Comfirmp, Mobile, Pic, Msg, Submit } = Account;
 
 @connect(
-  ({ account }) => ({
-    account: account
+  ({ admin }) => ({
+    account: admin
   }),
   { signupFunc }
 )

@@ -12,21 +12,24 @@ class Admin extends BaseComponent {
   }
 
   getInfo(req, res) {
-    // const { admin, autoSignin } = req.session;
-    // if (admin) {
-    //   return res.send({
-    //     status: 1,
-    //     data: admin,
-    //     autoSignin: autoSignin
-    //   });
-    // } else {
-    //   return res.send({
-    //     status: 0,
-    //     type: 'ERROR_GET_ADMIN_INFO',
-    //     message: '尚未登录'
-    //   });
-    // }
-    return res.send({ status: 1, data: {username: 'qingzhan', password: 'lala', role: 'hhh', status: 'success'} });
+    const { admin } = req.session;
+    if (!admin) {
+      return res.send({
+        status: 0,
+        type: 'ERROR_GET_ADMIN_INFO',
+        message: '尚未登录'
+      });
+    } else {
+      if (admin.status === 'success') {
+        return res.send({ status: 1, data: admin });
+      } else if (admin.status === 'audit') {
+        return res.send({ status: 2, account: admin.username });
+      } else if (admin.status === 'success') {
+        return res.send({ status: 3, reasion: admin.reasion });
+      } else {
+        return res.send({ status: 0, type: 'ERROR_NOT_FIND_STATUS', message: '未找到此状态' });
+      }    
+    }
   }
 
   signin(req, res) {
@@ -40,7 +43,7 @@ class Admin extends BaseComponent {
         });
       }
 
-      const { username, password, acc_pic, type, mobile, mobile_pic, msg_captch, autoSignin } = fields;
+      const { username, password, acc_pic, type, mobile, mobile_pic, msg_captcha, autoSignin } = fields;
       const { pic_token, msg_code } = req.session;
 
       if (type === 'account') {
@@ -82,7 +85,7 @@ class Admin extends BaseComponent {
           } else if (admin.status === 'success') {
             return res.send({ status: 3, reasion: admin.reasion });
           } else {
-            throw new Error('未找到此状态');
+            return res.send({ status: 0, type: 'ERROR_NOT_FIND_STATUS', message: '未找到此状态' });
           }
         } else {
           return res.send({
@@ -95,6 +98,10 @@ class Admin extends BaseComponent {
         try {
           if (!mobile) {
             throw new Error('手机号不能为空');
+          } else if (!msg_captcha || msg_captcha !== msg_code.code) {
+            throw new Error('短信验证码错误');
+          } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
+            throw new Error('短信验证码已失效，请重新获取');
           }
         } catch(err) {
           return res.send({
@@ -104,8 +111,6 @@ class Admin extends BaseComponent {
           });
         }
 
-        const admin = await AdminModel.findOne({ mobile });
-
         if (!admin) {
           return res.send({
             status: 0,
@@ -113,9 +118,15 @@ class Admin extends BaseComponent {
             message: '管理员账户不存在'
           });
         } else {
-          return res.send({
-            status: 1
-          });
+          if (admin.status === 'success') {
+            return res.send({ status: 1, acc_pic: admin.username });
+          } else if (admin.status === 'audit') {
+            return res.send({ status: 2, account: admin.username });
+          } else if (admin.status === 'success') {
+            return res.send({ status: 3, reasion: admin.reasion });
+          } else {
+            return res.send({ status: 0, type: 'ERROR_NOT_FIND_STATUS', message: '未找到此状态' });
+          }
         }
       }
     });

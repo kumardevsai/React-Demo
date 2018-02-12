@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-// import { Switch } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
 import { Layout, Icon } from 'antd';
+import { getAdminInfo } from '@/store/admin.reducer';
 import { changeLayoutCollapsed } from '@/store/global.reducer';
 import GlobalHeader from '@/components/GlobalHeader';
 import GlobalFooter from '@/components/GlobalFooter';
@@ -35,19 +36,37 @@ const query = {
 
 @connect(
   ({ admin, global}) => ({
-    currentAdmin: admin,
+    currentStatus: admin.status,
+    currentAdmin: admin.admin,
     collapsed: global.collapsed
   }),
-  { changeLayoutCollapsed }
+  { getAdminInfo, changeLayoutCollapsed }
 )
 class BasicLayout extends PureComponent {
+  componentWillMount() {
+    this.props.getAdminInfo();
+  }
+
   handleMenuCollapse(collapsed) {
     this.props.changeLayoutCollapsed(collapsed);
   }
 
-  render() {
-    const { collapsed, currentAdmin } = this.props;
+  renderChild(status, layout) {
+    switch(status) {
+      case 'success':
+        return layout;
+      case 'audit':
+        return <Redirect to="/admin/acc-result" />
+      case 'reject':
+        return <Redirect to="/admin/acc-result" />
+      case 'normal':
+      default:
+        return <Redirect to="/admin/signin" />
+    }
+  }
 
+  render() {
+    const { collapsed, currentAdmin, currentStatus } = this.props;
     const layout = (
       <Layout>
         <SliderMenu
@@ -88,10 +107,12 @@ class BasicLayout extends PureComponent {
       </Layout>
     );
 
+    const child = this.renderChild(currentStatus, layout);
+
     return (
       <DocumentTitle title="hhh">
         <ContainerQuery query={query}>
-          { parmas => (<div className={classNames(parmas)}>{layout}</div>) }
+          { parmas => (<div className={classNames(parmas)}>{child}</div>) }
         </ContainerQuery>
       </DocumentTitle>
     );

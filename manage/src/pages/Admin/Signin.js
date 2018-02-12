@@ -4,21 +4,22 @@ import { Alert, Checkbox, Icon } from 'antd';
 import { Link, Redirect } from 'react-router-dom';
 import styles from './Signin.scss';
 import Account from '@/components/Account';
-import { signinFunc } from '@/store/account.reducer';
+import { signinFunc, error, changeSigninType } from '@/store/admin.reducer';
 
 const { Tab, Username, Password, Pic, Mobile, Msg, Submit } = Account;
 
 @connect(
-  ({ account }) => ({
-    account: account
+  ({ admin }) => ({
+    currentStatus: admin.status,
+    currentType: admin.signinType,
+    currentError: admin.error
   }),
-  { signinFunc }
+  { signinFunc, error, changeSigninType }
 )
 export default class SigninPage extends Component {
   state = {
     type: 'account',
-    autoSignin: true,
-    error: ''
+    autoSignin: true
   }
 
   handleSubmit(err, values) {
@@ -29,9 +30,14 @@ export default class SigninPage extends Component {
     }
   }
 
+  onTabChange(type) {
+    this.setState({ type });
+    this.props.changeSigninType(type);
+  }
+
   getError(msg) {
     if (msg) {
-      this.setState({ error: msg });
+      this.props.error(msg);
     }
   }
 
@@ -48,32 +54,35 @@ export default class SigninPage extends Component {
   }
 
   renderRedirect(status) {
-    if (status === 'success') {
-      return <Redirect to="/" />
-    } else if (status === 'audit' || status === 'reject') {
-      return <Redirect to="/admin/acc-result" />
-    } else {
-      return null;
+    switch(status) {
+      case 'success':
+        return <Redirect to="/" />;
+      case 'audit':
+      case 'reject':
+        return <Redirect to="/admin/acc-result" />
+      default:
+        return null;
     }
   }
 
   render() {
-    const { account } = this.props;
-    const { type, autoSignin, error } = this.state; 
+    const { currentStatus, currentType, currentError } = this.props;
+    const { type, autoSignin } = this.state;
     return (
       <div className={styles.main}>
         <Account
           defaultActiveKey={type}
+          onTabChange={this.onTabChange.bind(this)}
           onSubmit={this.handleSubmit.bind(this)}
         >
           {
-            this.renderRedirect(account.status)
+            this.renderRedirect(currentStatus)
           }
           <Tab key="account" tab="账户密码登录">
             {
-              account.status === 'error' &&
-              account.type === 'account' &&
-              this.renderMessage(account.error)
+              currentStatus === 'error' &&
+              currentType === 'account' &&
+              this.renderMessage(currentError)
             }
             <Username name="username" />
             <Password name="password" />
@@ -81,12 +90,9 @@ export default class SigninPage extends Component {
           </Tab>
           <Tab key="mobile" tab="手机号登录">
             {
-              error && this.renderMessage(error)
-            }
-            {
-              account.status === 'error' &&
-              account.type === 'mobile' &&
-              this.renderMessage(account.error)
+              currentStatus === 'error' &&
+              currentType === 'mobile' &&
+              this.renderMessage(currentError)
             }
             <Mobile name="mobile" />
             <Pic name="mobile_pic" />
