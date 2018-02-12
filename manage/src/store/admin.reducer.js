@@ -1,13 +1,14 @@
-import { signupApi, signinApi, getAdminInfoApi } from '@/service/api';
+import { signupApi, signinApi, signoutApi, getAdminInfoApi } from '@/service/api';
 
 const ERROR = 'ERROR';
 const SUCCESS = 'SUCCESS';
 const AUDIT = 'AUDIT';
 const REJECT = 'REJECT';
-const CHANGE_TYPE = 'CHANGE_TYPE';
+const CHANGE_SIGNIN_TYPE = 'CHANGE_SIGNIN_TYPE';
+const SIGNOUT = 'SIGNOUT';
 
 /*
-* status:
+* status: 存储管理员申请状态
 * normal  申请状态 --> 无
 * sucess  申请成功状态
 * audit   申请待审核状态
@@ -16,11 +17,11 @@ const CHANGE_TYPE = 'CHANGE_TYPE';
 */
 
 const init = {
+  admin: null,
   status: 'normal',
   signinType: 'account',
   rejectReasion: '',
   error: '',
-  admin: null,
   account: ''
 };
 
@@ -33,11 +34,13 @@ export function admin(state=init, action) {
     case AUDIT:
       return { ...state, status: 'audit', account: payload };
     case REJECT:
-      return {};
+      return { ...state, status: 'reject', reason: payload };
     case ERROR:
       return { ...state, status: 'error', error: payload };
-    case CHANGE_TYPE:
+    case CHANGE_SIGNIN_TYPE:
       return { ...state, signinType: payload };
+    case SIGNOUT:
+      return { ...state, status: 'normal', admin: null };
     default:
       return state;
   }
@@ -75,13 +78,23 @@ export function signinFunc(info) {
   return dispatch => {
     signinApi(info).then(res => {
       if (res.status === 1) {
-        dispatch(success(res.account));
+        dispatch(success(res.data));
       } else if (res.status === 2) {
         dispatch(audit(res.account));
       } else if (res.status === 3) {
         dispatch(reject(res.reason));
       } else {
         dispatch(error(res.message));
+      }
+    });
+  }
+}
+
+export function signoutFunc() {
+  return dispatch => {
+    signoutApi().then(res => {
+      if (res.status === 1) {
+        dispatch(signout());
       }
     });
   }
@@ -104,5 +117,9 @@ export function error(msg) {
 }
 
 export function changeSigninType(type) {
-  return { type: CHANGE_TYPE, payload: type };
+  return { type: CHANGE_SIGNIN_TYPE, payload: type };
+}
+
+function signout() {
+  return { type: SIGNOUT };
 }

@@ -31,6 +31,10 @@ export default class AccPic extends Component {
     this.onGetPicCaptcha();
   }
 
+  componentWillUnmount() {
+    this.setState = () => {};
+  }
+
   componentDidMount() {
     if (this.context.updateActive) {
       this.context.updateActive(this.props.name);

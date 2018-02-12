@@ -1,15 +1,21 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import DocumentTitle from 'react-document-title';
 import { ContainerQuery } from 'react-container-query';
 import classNames from 'classnames';
+import { enquireScreen } from 'enquire-js';
 import { Layout, Icon } from 'antd';
-import { getAdminInfo } from '@/store/admin.reducer';
+import { getAdminInfo, signoutFunc } from '@/store/admin.reducer';
 import { changeLayoutCollapsed } from '@/store/global.reducer';
 import GlobalHeader from '@/components/GlobalHeader';
 import GlobalFooter from '@/components/GlobalFooter';
 import SliderMenu from '@/components/SliderMenu';
+import logo from '@/assets/logo.svg';
+import Analysis from '@/pages/Dashboard/Analysis';
+import Monitor from '@/pages/Dashboard/Monitor';
+import AdminList from '@/pages/Account/AdminList';
 
 const { Content } = Layout;
 
@@ -34,53 +40,99 @@ const query = {
   },
 };
 
+let isMobile;
+enquireScreen((b) => {
+  isMobile = b;
+});
+
 @connect(
   ({ admin, global}) => ({
     currentStatus: admin.status,
     currentAdmin: admin.admin,
     collapsed: global.collapsed
   }),
-  { getAdminInfo, changeLayoutCollapsed }
+  { getAdminInfo, signoutFunc, changeLayoutCollapsed }
 )
 class BasicLayout extends PureComponent {
+  static childContextTypes = {
+    location: PropTypes.object
+  };
+  state = {
+    isMobile
+  };
+  getChildContext() {
+    const { location } = this.props;
+    return {
+      location
+    };
+  }
+
   componentWillMount() {
-    this.props.getAdminInfo();
+    if (!this.props.currentAdmin) {
+      this.props.getAdminInfo();
+    }
+
+    switch(this.props.currentStatus) {
+      case 'success':
+        return null;
+      case 'audit':
+        this.props.history.push('/admin/acc-result');
+        break;
+      case 'reject':
+       this.props.history.push('/admin/acc-result');
+       break;
+      case 'normal':
+      default:
+        this.props.history.push('/admin/signin');
+        break;
+    }
+  }
+
+  componentDidMount() {
+    enquireScreen((mobile) => {
+      this.setState({
+        isMobile: mobile,
+      });
+    });
   }
 
   handleMenuCollapse(collapsed) {
     this.props.changeLayoutCollapsed(collapsed);
   }
 
-  renderChild(status, layout) {
-    switch(status) {
-      case 'success':
-        return layout;
-      case 'audit':
-        return <Redirect to="/admin/acc-result" />
-      case 'reject':
-        return <Redirect to="/admin/acc-result" />
-      case 'normal':
-      default:
-        return <Redirect to="/admin/signin" />
+  handleMenuClick({ key }) {
+    if (key === 'signout') {
+      this.props.signoutFunc();
     }
   }
 
   render() {
-    const { collapsed, currentAdmin, currentStatus } = this.props;
+    const { collapsed, currentAdmin } = this.props;
     const layout = (
       <Layout>
         <SliderMenu
           collapsed={collapsed}
+          isMobile={this.state.isMobile}
           onCollapse={this.handleMenuCollapse.bind(this)}
         />
         <Layout>
           <GlobalHeader
+            logo={logo}
             currentAdmin={currentAdmin}
             collapsed={collapsed}
+            isMobile={this.state.isMobile}
+            onMenuClick={this.handleMenuClick.bind(this)}
             onCollapse={this.handleMenuCollapse.bind(this)}
           />
           <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
-            hhh
+            <Switch>
+              <Route exact path="/" render={() => <Redirect to="/dashboard/analysis" />} key="home" />
+              <Route exact path="/dashboard" render={() => <Redirect to="/dashboard/analysis" />}  key="dashboard" />
+              <Route path="/dashboard/analysis" component={Analysis} key="analysis" />
+              <Route path="/dashboard/monitor" component={Monitor} key="monitor" />
+              <Route exact path="/account" render={() => <Redirect to="/account/adminlist" />} key="account" />
+              <Route path="/account/adminlist" component={AdminList} key="adminlist" />
+            </Switch>
           </Content>
           <GlobalFooter
             links={
@@ -107,12 +159,10 @@ class BasicLayout extends PureComponent {
       </Layout>
     );
 
-    const child = this.renderChild(currentStatus, layout);
-
     return (
       <DocumentTitle title="hhh">
         <ContainerQuery query={query}>
-          { parmas => (<div className={classNames(parmas)}>{child}</div>) }
+          { parmas => (<div className={classNames(parmas)}>{layout}</div>) }
         </ContainerQuery>
       </DocumentTitle>
     );

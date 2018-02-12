@@ -8,6 +8,7 @@ const SALT_WORK_FACTOR = 10;
 class Admin extends BaseComponent {
   constructor() {
     super();
+    this.signin = this.signin.bind(this);
     this.signup = this.signup.bind(this);
   }
 
@@ -20,15 +21,16 @@ class Admin extends BaseComponent {
         message: '尚未登录'
       });
     } else {
-      if (admin.status === 'success') {
-        return res.send({ status: 1, data: admin });
-      } else if (admin.status === 'audit') {
-        return res.send({ status: 2, account: admin.username });
-      } else if (admin.status === 'success') {
-        return res.send({ status: 3, reasion: admin.reasion });
-      } else {
-        return res.send({ status: 0, type: 'ERROR_NOT_FIND_STATUS', message: '未找到此状态' });
-      }    
+      switch(admin.status) {
+        case 'success':
+          return res.send({ status: 1, data: admin });
+        case 'audit':
+          return res.send({ status: 2, account: admin.username });
+        case 'reject':
+          return res.send({ status: 3, reasion: admin.reasion });
+        default:
+          return res.send({ status: 0, type: 'ERROR_NOT_FIND_STATUS', message: '未找到此状态' });
+      }
     }
   }
 
@@ -78,14 +80,20 @@ class Admin extends BaseComponent {
         const isMatch = await bcrypt.compare(password, admin.password);
 
         if (isMatch) {
-          if (admin.status === 'success') {
-            return res.send({ status: 1, acc_pic: admin.username });
-          } else if (admin.status === 'audit') {
-            return res.send({ status: 2, account: admin.username });
-          } else if (admin.status === 'success') {
-            return res.send({ status: 3, reasion: admin.reasion });
+          if (autoSignin) {
+            req.session.admin = admin;
           } else {
-            return res.send({ status: 0, type: 'ERROR_NOT_FIND_STATUS', message: '未找到此状态' });
+            req.session.admin = null;
+          }
+          switch(admin.status) {
+            case 'success':
+              return res.send({ status: 1, data: admin });
+            case 'audit':
+              return res.send({ status: 2, account: admin.username });
+            case 'reject':
+              return res.send({ status: 3, reasion: admin.reasion });
+            default:
+              return res.send({ status: 0, type: 'ERROR_NOT_FIND_STATUS', message: '未找到此状态' });
           }
         } else {
           return res.send({
@@ -118,14 +126,20 @@ class Admin extends BaseComponent {
             message: '管理员账户不存在'
           });
         } else {
-          if (admin.status === 'success') {
-            return res.send({ status: 1, acc_pic: admin.username });
-          } else if (admin.status === 'audit') {
-            return res.send({ status: 2, account: admin.username });
-          } else if (admin.status === 'success') {
-            return res.send({ status: 3, reasion: admin.reasion });
+          if (autoSignin) {
+            req.session.admin = admin;
           } else {
-            return res.send({ status: 0, type: 'ERROR_NOT_FIND_STATUS', message: '未找到此状态' });
+            req.session.admin = null;
+          }
+          switch(admin.status) {
+            case 'success':
+              return res.send({ status: 1, data: admin });
+            case 'audit':
+              return res.send({ status: 2, account: admin.username });
+            case 'reject':
+              return res.send({ status: 3, reasion: admin.reasion });
+            default:
+              return res.send({ status: 0, type: 'ERROR_NOT_FIND_STATUS', message: '未找到此状态' });
           }
         }
       }

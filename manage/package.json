@@ -25,7 +25,11 @@
   "dependencies": {
     "antd": "^3.1.6",
     "classnames": "^2.2.5",
+    "enquire-js": "^0.1.2",
+    "lodash": "^4.17.5",
+    "lodash-decorators": "^4.5.0",
     "omit.js": "^1.0.0",
+    "rc-drawer-menu": "^0.5.5",
     "react": "^16.2.0",
     "react-container-query": "^0.11.0",
     "react-document-title": "^2.0.3",

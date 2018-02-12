@@ -11,7 +11,7 @@ const { Tab, Username, Password, Pic, Mobile, Msg, Submit } = Account;
 @connect(
   ({ admin }) => ({
     currentStatus: admin.status,
-    currentType: admin.signinType,
+    currentSignType: admin.signinType,
     currentError: admin.error
   }),
   { signinFunc, error, changeSigninType }
@@ -26,13 +26,13 @@ export default class SigninPage extends Component {
     if (!err) {
       const { type, autoSignin } = this.state;
       const info = { ...values, type, autoSignin };
+      this.props.changeSigninType(type);
       this.props.signinFunc(info);
     }
   }
 
   onTabChange(type) {
     this.setState({ type });
-    this.props.changeSigninType(type);
   }
 
   getError(msg) {
@@ -66,7 +66,7 @@ export default class SigninPage extends Component {
   }
 
   render() {
-    const { currentStatus, currentType, currentError } = this.props;
+    const { currentStatus, currentSignType, currentError } = this.props;
     const { type, autoSignin } = this.state;
     return (
       <div className={styles.main}>
@@ -81,7 +81,7 @@ export default class SigninPage extends Component {
           <Tab key="account" tab="账户密码登录">
             {
               currentStatus === 'error' &&
-              currentType === 'account' &&
+              currentSignType === 'account' &&
               this.renderMessage(currentError)
             }
             <Username name="username" />
@@ -91,7 +91,7 @@ export default class SigninPage extends Component {
           <Tab key="mobile" tab="手机号登录">
             {
               currentStatus === 'error' &&
-              currentType === 'mobile' &&
+              currentSignType === 'mobile' &&
               this.renderMessage(currentError)
             }
             <Mobile name="mobile" />

@@ -17,8 +17,7 @@ const App = () => {
             path="/admin"
             component={ AdminLayout }
           />
-          <Route 
-            exact
+          <Route
             path="/"
             component={ BasicLayout }
           />

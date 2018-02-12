@@ -1,33 +1,19 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Layout } from 'antd';
-import styles from './index.scss';
-import logo from '@/assets/logo.svg';
+import React from 'react';
+import DrawerMenu from 'rc-drawer-menu';
+import 'rc-drawer-menu/assets/index.css';
+import SliderMenu from './SliderMenu';
 
-const { Sider } = Layout;
-
-class SliderMenu extends Component {
-  render() {
-    const { collapsed, onCollapse } = this.props;
-    return (
-      <Sider
-        trigger={null}
-        collapsible
-        collapsed={collapsed}
-        breakpoint="lg"
-        onCollapse={onCollapse}
-        width={256}
-        className={styles.sider}
-      >
-        <div className={styles.logo} key="logo">
-          <Link to="/">
-            <img src={logo} alt="logo" />
-            <h1>Qz Demo Manage</h1>
-          </Link>
-        </div>
-      </Sider>
-    );
-  }
-}
-
-export default SliderMenu;
+export default props => (
+  props.isMobile ? (
+    <DrawerMenu
+      parent={null}
+      level={null}
+      iconChild={null}
+      open={!props.collapsed}
+      onMaskClick={() => { props.onCollapse(true); }}
+      width="256px"
+    >
+      <SliderMenu {...props} collapsed={props.isMobile ? false : props.collapsed} />
+    </DrawerMenu>
+  ) : <SliderMenu {...props} />
+);
