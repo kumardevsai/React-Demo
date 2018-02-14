@@ -106,6 +106,8 @@ class Admin extends BaseComponent {
         try {
           if (!mobile) {
             throw new Error('手机号不能为空');
+          } else if (!msg_code) {
+            throw new Error('尚未获取短信验证码');
           } else if (!msg_captcha || msg_captcha !== msg_code.code) {
             throw new Error('短信验证码错误');
           } else if ((Date.now() - msg_code.time) / (1000 * 60) > 10) {
@@ -118,6 +120,8 @@ class Admin extends BaseComponent {
             message: err.message
           });
         }
+
+        const admin = await AdminModel.findOne({ username }, '-_id -__v');
 
         if (!admin) {
           return res.send({
@@ -160,6 +164,24 @@ class Admin extends BaseComponent {
       const { msg_code } = req.session;
       const { username, password, mobile, msg_captcha } = fields;
 
+      const user_name = await AdminModel.findOne({ username });
+      if (user_name) {
+        return res.send({
+          status: 0,
+          type: 'ADMIN_HASN_EXIST',
+          message: '用户名已经存在了'
+        });
+      }
+
+      const user_mobile = await AdminModel.findOne({ mobile });
+      if (user_mobile) {
+        return res.send({
+          status: 0,
+          type: 'ADMIN_HASN_EXIST',
+          message: '手机号已经存在了'
+        });
+      }
+      
       try {
         if (!msg_code) {
           throw new Error('尚未获取短信验证码');
@@ -184,24 +206,6 @@ class Admin extends BaseComponent {
         });
       }
 
-      const user_name = await AdminModel.findOne({ username });
-      if (user_name) {
-        return res.send({
-          status: 0,
-          type: 'ADMIN_HASN_EXIST',
-          message: '用户名已经存在了'
-        });
-      }
-
-      const user_mobile = await AdminModel.findOne({ mobile });
-      if (user_mobile) {
-        return res.send({
-          status: 0,
-          type: 'ADMIN_HASN_EXIST',
-          message: '手机号已经存在了'
-        });
-      }
-
       const bcryptPassword = await this.encryption(password);
       const admin_id = await this.getId('admin_id');
       const admin_model = {
@@ -213,11 +217,9 @@ class Admin extends BaseComponent {
 
       try {
         await AdminModel.create(admin_model);
-        const adminInfo = await AdminModel.findOne({ id: admin_id }, '-__v -_id -password -create_at');
-        req.session.admin = adminInfo;
         return res.send({
           status: 1,
-          data: adminInfo
+          account: username
         });
       } catch(err) {
         return res.send({

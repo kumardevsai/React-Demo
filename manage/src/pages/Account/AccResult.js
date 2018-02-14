@@ -7,19 +7,22 @@ import styles from './AccResult.scss';
 
 const actionAudit = (
   <div className={styles.actions}>
-    <Link to="/"><Button size="large">返回首页</Button></Link>
+    <Link to="/account/signin"><Button size="large" type="primary">使用其他账户登录</Button></Link>
+    <a href="https://github.com/yudaren007007/React-Demo" target="_blank" rel="noopener noreferrer"><Button size="large">GITHUB首页</Button></a>
   </div>
 );
 
 const actionReject = (
   <div className={styles.actions}>
     <Button type="primary">重新申请</Button>
+    <a href="https://github.com/yudaren007007/React-Demo" target="_blank" rel="noopener noreferrer"><Button size="large">GITHUB首页</Button></a>
   </div>
 );
 
 const actionsNormal = (
   <div className={styles.actions}>
-    <Link to="/admin/signup"><Button size="large" type="primary">申请成为管理员</Button></Link>
+    <Link to="/account/signup"><Button size="large" type="primary">申请成为管理员</Button></Link>
+    <a href="https://github.com/yudaren007007/React-Demo" target="_blank" rel="noopener noreferrer"><Button size="large">GITHUB首页</Button></a>
   </div>
 );
 

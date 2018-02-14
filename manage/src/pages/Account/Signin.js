@@ -100,13 +100,13 @@ export default class SigninPage extends Component {
           </Tab>
           <div className={styles.operating}>
             <Checkbox checked={autoSignin} onChange={this.changeAutoSignin.bind(this)}>自动登录</Checkbox>
-            <Link style={{ float: 'right' }} to="/admin/forget">忘记密码</Link>
+            <Link style={{ float: 'right' }} to="/account/forget">忘记密码</Link>
           </div>
           <Submit text="登录" />
           <div className={styles.other}>
             其他登录方式
             <Icon className={styles.icon} type="wechat" />
-            <Link className={styles.signup} to="/admin/signup">申请管理员</Link>
+            <Link className={styles.signup} to="/account/signup">申请管理员</Link>
           </div>
         </Account>
       </div>

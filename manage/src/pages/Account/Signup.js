@@ -4,23 +4,22 @@ import { Link, Redirect } from 'react-router-dom';
 import { Alert } from 'antd';
 import Account from '@/components/Account';
 import styles from './Signup.scss';
-import { signupFunc } from '@/store/admin.reducer';
+import { signupFunc, error } from '@/store/admin.reducer';
 
 const { Username, Password, Comfirmp, Mobile, Pic, Msg, Submit } = Account;
 
 @connect(
   ({ admin }) => ({
-    account: admin
+    currentStatus: admin.status,
+    currentError: admin.error
   }),
-  { signupFunc }
+  { signupFunc, error }
 )
 export default class Signup extends Component {
-  state = {
-    error: ''
-  };
-
   getError(msg) {
-    this.setState({ error: msg });
+    if (msg) {
+      this.props.error(msg);
+    }
   }
 
   handleSubmit(err, value) {
@@ -35,26 +34,33 @@ export default class Signup extends Component {
     );
   }
 
+  getPath(status) {
+    switch(status) {
+      case 'success':
+        return <Redirect to="/" />
+      case 'audit':
+      case 'reject':
+        return <Redirect to="/account/acc-result" />
+      case 'normal':
+      case 'error':
+      default:
+        return null;
+    }
+  }
+
   render() {
-    const { account } = this.props;
-    const { error } = this.state;
+    const { currentStatus, currentError } = this.props;
     return (
       <div className={styles.main}>
-        {
-          account.status === 'audit' &&
-          <Redirect to="/admin/acc-result" />
-        }
+        { this.getPath(currentStatus) }
         <h3>申请管理员</h3>
         <Account
           onSubmit={this.handleSubmit.bind(this)}
         >
           {
-            error && this.renderMessage(error)
-          }
-          {
-            account.error &&
-            account.status === 'error' &&
-            this.renderMessage(account.error)
+            currentError &&
+            currentStatus === 'error' &&
+            this.renderMessage(currentError)
           }
           <Username
             name="username"
@@ -84,7 +90,7 @@ export default class Signup extends Component {
           <Mobile name="mobile" />
           <Pic name="pic_captcha" />
           <Msg name="msg_captcha" pic="pic_captcha" type="signup" getError={this.getError.bind(this)} />
-          <Submit className={styles.submit} text="申请"><Link className={styles.signin} to="/admin/signin">使用已有账户登录</Link></Submit>
+          <Submit className={styles.submit} text="申请"><Link className={styles.signin} to="/account/signin">使用已有账户登录</Link></Submit>
         </Account>
       </div>
     );

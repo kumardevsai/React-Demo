@@ -71,21 +71,6 @@ class BasicLayout extends PureComponent {
     if (!this.props.currentAdmin) {
       this.props.getAdminInfo();
     }
-
-    switch(this.props.currentStatus) {
-      case 'success':
-        return null;
-      case 'audit':
-        this.props.history.push('/admin/acc-result');
-        break;
-      case 'reject':
-       this.props.history.push('/admin/acc-result');
-       break;
-      case 'normal':
-      default:
-        this.props.history.push('/admin/signin');
-        break;
-    }
   }
 
   componentDidMount() {
@@ -106,8 +91,23 @@ class BasicLayout extends PureComponent {
     }
   }
 
+  getPath(status) {
+    switch(this.props.currentStatus) {
+      case 'success':
+        return null;
+      case 'audit':
+        return <Redirect to="/account/acc-result" />
+      case 'reject':
+        return <Redirect to="/account/acc-result" />
+      case 'normal':
+      default:
+        return <Redirect to="/account/signin" />
+    }
+  }
+
   render() {
-    const { collapsed, currentAdmin } = this.props;
+    const { collapsed, currentStatus, currentAdmin } = this.props;
+    const path = this.getPath(currentStatus);
     const layout = (
       <Layout>
         <SliderMenu
@@ -130,8 +130,8 @@ class BasicLayout extends PureComponent {
               <Route exact path="/dashboard" render={() => <Redirect to="/dashboard/analysis" />}  key="dashboard" />
               <Route path="/dashboard/analysis" component={Analysis} key="analysis" />
               <Route path="/dashboard/monitor" component={Monitor} key="monitor" />
-              <Route exact path="/account" render={() => <Redirect to="/account/adminlist" />} key="account" />
-              <Route path="/account/adminlist" component={AdminList} key="adminlist" />
+              <Route exact path="/user" render={() => <Redirect to="/user/adminlist" />} key="user" />
+              <Route path="/user/adminlist" component={AdminList} key="adminlist" />
             </Switch>
           </Content>
           <GlobalFooter
@@ -162,7 +162,7 @@ class BasicLayout extends PureComponent {
     return (
       <DocumentTitle title="hhh">
         <ContainerQuery query={query}>
-          { parmas => (<div className={classNames(parmas)}>{layout}</div>) }
+          { parmas => (<div className={classNames(parmas)}>{path ? path : layout}</div>) }
         </ContainerQuery>
       </DocumentTitle>
     );

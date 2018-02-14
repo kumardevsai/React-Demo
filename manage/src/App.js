@@ -14,7 +14,7 @@ const App = () => {
       <Router>
         <Switch>
           <Route
-            path="/admin"
+            path="/account"
             component={ AdminLayout }
           />
           <Route

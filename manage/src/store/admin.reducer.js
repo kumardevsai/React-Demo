@@ -66,7 +66,7 @@ export function signupFunc(info) {
   return dispatch => {
     signupApi(info).then(res => {
       if (res.status === 1) {
-        dispatch(audit(res.data.username));
+        dispatch(audit(res.account));
       } else {
         dispatch(error(res.message));
       }
