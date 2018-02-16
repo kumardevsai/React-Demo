@@ -56,10 +56,10 @@ export default class SigninPage extends Component {
   renderRedirect(status) {
     switch(status) {
       case 'success':
-        return <Redirect to="/" />;
+        return <Redirect from="/account/signin" to="/" />;
       case 'audit':
       case 'reject':
-        return <Redirect to="/admin/acc-result" />
+        return <Redirect from="/account/signin" to="/account/acc-result" />;
       default:
         return null;
     }

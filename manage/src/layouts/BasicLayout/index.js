@@ -15,7 +15,7 @@ import SliderMenu from '@/components/SliderMenu';
 import logo from '@/assets/logo.svg';
 import Analysis from '@/pages/Dashboard/Analysis';
 import Monitor from '@/pages/Dashboard/Monitor';
-import AdminList from '@/pages/Account/AdminList';
+import AdminList from '@/pages/User/AdminList';
 
 const { Content } = Layout;
 

@@ -1,5 +1,6 @@
 import { signupApi, signinApi, signoutApi, getAdminInfoApi } from '@/service/api';
 
+const NORMAL = 'NORMAL';
 const ERROR = 'ERROR';
 const SUCCESS = 'SUCCESS';
 const AUDIT = 'AUDIT';
@@ -37,6 +38,8 @@ export function admin(state=init, action) {
       return { ...state, status: 'reject', reason: payload };
     case ERROR:
       return { ...state, status: 'error', error: payload };
+    case NORMAL:
+      return { ...state, status: 'normal', admin: null, account: '', error: '', rejectReasion: '' };
     case CHANGE_SIGNIN_TYPE:
       return { ...state, signinType: payload };
     case SIGNOUT:
@@ -52,6 +55,7 @@ export function getAdminInfo() {
       if (res.status === 1) {
         dispatch(success(res.data));
       } else if (res.status === 2) {
+        console.log(23);
         dispatch(audit(res.account));
       } else if (res.status === 3) {
         dispatch(reject(res.reason));
@@ -114,6 +118,10 @@ function reject(reason) {
 
 export function error(msg) {
   return { type: ERROR, payload: msg };
+}
+
+export function restoreStatus() {
+  return { type: NORMAL };
 }
 
 export function changeSigninType(type) {
