@@ -34,7 +34,7 @@ class AdminLayout extends PureComponent {
               <Route path="/account/signup" component={Signup} key="signup" />
               <Route path="/account/forget" component={Forget} key="forget" />
               <Route path="/account/acc-result" component={AccResult} key="acc-result" />
-              <Redirect exact from="/admin" to="/admin/signin" />
+              <Redirect exact from="/account" to="/account/signin" />
             </Switch>
           </div>
           <GlobalFooter

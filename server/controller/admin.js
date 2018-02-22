@@ -244,6 +244,15 @@ class Admin extends BaseComponent {
     });
   }
 
+  async getList(req, res) {
+    const adminList = await AdminModel.find({}, '-__v -_id');
+
+    return res.send({
+      status: 1,
+      data: adminList
+    });
+  }
+
 }
 
 export default new Admin();

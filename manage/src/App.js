@@ -18,7 +18,6 @@ const App = () => {
             component={ AdminLayout }
           />
           <Route
-            exact
             path="/"
             component={ BasicLayout }
           />

@@ -29,3 +29,8 @@ export const signupApi = (adminInfo) => fetch('/admin/signup', adminInfo, 'POST'
 * 管理员登出
 */
 export const signoutApi = () => fetch('/admin/signout');
+
+/*
+* 获取管理员列表
+*/
+export const getAdminListApi = () => fetch('/admin/list');

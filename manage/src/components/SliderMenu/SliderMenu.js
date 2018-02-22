@@ -36,8 +36,8 @@ class SliderMenu extends Component {
             <Menu.Item key="analysis"><Link to="/dashboard/analysis">分析页</Link></Menu.Item>
             <Menu.Item key="monitor"><Link to="/dashboard/monitor">监控页</Link></Menu.Item>
           </SubMenu>
-          <SubMenu key="account" title={<span><Icon type="team" /><span>账户管理</span></span>}>
-            <Menu.Item key="adminlist"><Link to="/account/adminlist">管理员列表</Link></Menu.Item>
+          <SubMenu key="user" title={<span><Icon type="team" /><span>账户管理</span></span>}>
+            <Menu.Item key="adminlist"><Link to="/user/adminlist">管理员列表</Link></Menu.Item>
           </SubMenu>
         </Menu>
       </Sider>

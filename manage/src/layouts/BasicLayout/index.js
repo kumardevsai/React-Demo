@@ -124,7 +124,7 @@ class BasicLayout extends PureComponent {
             onMenuClick={this.handleMenuClick.bind(this)}
             onCollapse={this.handleMenuCollapse.bind(this)}
           />
-          <Content style={{ margin: '24px 16px', padding: 24, background: '#fff', minHeight: 280 }}>
+          <Content style={{ margin: '24px 24px 0', height: '100%' }}>
             <Switch>
               <Route exact path="/" render={() => <Redirect to="/dashboard/analysis" />} key="home" />
               <Route exact path="/dashboard" render={() => <Redirect to="/dashboard/analysis" />}  key="dashboard" />

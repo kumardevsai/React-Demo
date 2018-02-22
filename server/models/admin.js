@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import moment from 'moment';
+import adminData from '../data/admin';
 
 const Schema = mongoose.Schema;
 
@@ -59,18 +60,20 @@ const Admin = mongoose.model('Admin', AdminSchema);
 
 Admin.findOne((err, data) => {
   if (!data) {
-    var salt = bcrypt.genSaltSync(10);
-    var hash = bcrypt.hashSync('123456', salt);
-    const rootAdmin = new Admin({
-      id: 0,
-      nickname: '青湛',
-      username: 'qingzhan',
-      password: hash,
-      mobile: '18788888888',
-      role: 101,
-      status: 'success'
+    adminData.map(async item => {
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(item.password, salt);
+      const _admin = new Admin({
+        id: item.id,
+        nickname: item.nickname,
+        username: item.username,
+        password: hash,
+        mobile: item.mobile,
+        role: item.role,
+        status: item.status
+      });
+      await _admin.save();
     });
-    rootAdmin.save();
   }
 });
 
