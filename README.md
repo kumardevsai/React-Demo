@@ -1,6 +1,6 @@
 # React-Demo
 
-**重点说明，一定要看这里！！！换号的原因，此仓库移位(新地址)[https://github.com/mintsweet/parctice]!加入Native和桌面应用计划！**
+**重点说明，一定要看这里！！！换号的原因，此仓库移位[新地址](https://github.com/mintsweet/parctice)!加入Native和桌面应用计划！**
 
 React + Redux + Express + MongoDB + Antd + Purely ==> (移动端)最佳实践！！构建技术社区前后端！！
 
